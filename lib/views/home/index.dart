@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert' as convert;
-import 'package:dio/dio.dart';
 import '../../provider/globalProvider.dart';
 import '../../enums/homeEnum.dart'
     show freightSpaceHeader, freightSpaceRowKey, toolHeader, toolRowKey;
@@ -52,34 +50,12 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
         });
       }
     });
-    getHttp();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  /*
-  * Base64解密
-  */
-  static String base64Decode(String data) {
-    List<int> bytes = convert.base64Decode(data);
-    // 网上找的很多都是String.fromCharCodes，这个中文会乱码
-    //String txt1 = String.fromCharCodes(bytes);
-    String result = convert.utf8.decode(bytes);
-    return result;
-  }
-
-  void getHttp() async {
-    try {
-      var response = await Dio().get(
-          'http://tts.youdao.com/fanyivoice?word=你好，我是你好&le=zh&keyfrom=speaker-target');
-      print('response, ${response}');
-    } catch (e) {
-      print(e);
-    }
   }
 
   /*

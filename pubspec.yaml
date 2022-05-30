@@ -37,6 +37,7 @@ dependencies:
   provider: ^6.0.3                # 状态管理
   web_socket_channel: ^2.2.0      # socket
   dio: ^4.0.6                     # http请求
+  flutter_tts: ^3.4.0             # 语音合成
 
 dev_dependencies:
   flutter_test:
