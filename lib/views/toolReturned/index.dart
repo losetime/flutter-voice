@@ -23,21 +23,16 @@ class _ToolReturned extends State<ToolReturned>
     '归还情况'
   ];
   List<String> rowKey = [
-    'content',
-    'content',
-    'content',
-    'content',
-    'msgTime',
-    'content',
-    'msgTime',
-    'content',
+    'toolName',
+    'bidNo',
+    'toolTypeName',
+    'toolTagName',
+    'id',
+    'currentPosition',
+    'expectPosition',
+    'layStatus',
   ];
-  List sourceData = [
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'}
-  ];
+  List sourceData = [];
 
   @override
   void initState() {
@@ -45,23 +40,15 @@ class _ToolReturned extends State<ToolReturned>
   }
 
   /*
-   * @desc 处理从websockt获取的表格数据 
-   **/
-  void formatTableData() {
-    switch (provider.socketInfo['type']) {
-      case 'toolLog':
-        var temp = [...sourceData];
-        // 如果大于10条则删除最后一条
-        if (temp.length > 10) {
-          temp.removeAt(temp.length - 1);
-        }
-        // 向首部插入
-        temp.insert(0, provider.socketInfo);
-        setState(() {
-          sourceData = temp;
-        });
-        break;
-    }
+   * @desc 初始化Provider 
+   */
+  void initProvider(context) {
+    provider = Provider.of<HomeProvider>(context);
+    provider.addListener(() {
+      setState(() {
+        sourceData = provider.socketInfo['toolRetList'];
+      });
+    });
   }
 
   /*
@@ -83,7 +70,7 @@ class _ToolReturned extends State<ToolReturned>
           decoration: const BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.contain,
-              image: AssetImage('assets/images/header-title-bg.png'),
+              image: AssetImage('assets/images/header-bg.png'),
             ),
           ),
           child: const Text(
@@ -191,10 +178,7 @@ class _ToolReturned extends State<ToolReturned>
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<HomeProvider>(context);
-    provider.addListener(() {
-      formatTableData();
-    });
+    initProvider(context);
     return SingleChildScrollView(
       child: Container(
         constraints: BoxConstraints(

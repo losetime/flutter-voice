@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:date_format/date_format.dart';
+import 'dart:async';
 import '../../provider/globalProvider.dart';
 import '../../enums/homeEnum.dart'
     show freightSpaceHeader, freightSpaceRowKey, toolHeader, toolRowKey;
@@ -12,112 +14,402 @@ class HomeIndex extends StatefulWidget {
 
 class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   late HomeProvider provider;
-  List toolLogList = [
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'}
+  List toolLogList = [];
+
+  List storeLogList = [
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
+    {
+      "antennaNum": "3",
+      "bidNo": "1626WN15009R0101",
+      "createTime": "2022-04-19 11:13:39",
+      "delFlag": "0",
+      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+      "id": "N-hSYsQUmAyE-Rf12TIU6",
+      "layStatus": "1",
+      "name": "仓位1-2",
+      "readerMac": "19216835128",
+      "remark": "螺丝刀",
+      "status": "1",
+      "toolCorrectSum": '0',
+      "toolExpectSum": '0',
+      "toolInSum": '0',
+      "toolIncorrectSum": '0',
+      "toolLeaveSum": '0',
+      "updateTime": "2022-05-24 10:27:00",
+      "expectPosition": '123'
+    },
   ];
 
-  List freightSpaceLogList = [
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'},
-    {'msgTime': '2021-12-11', 'content': '放置错误'}
-  ];
+  Map overviewData = {
+    'receiveNum': '',
+    'returnNum': '',
+    'storeNum': '',
+    'toolNum': '',
+    'toolTypeNum': ''
+  };
 
   late TabController _tabController;
 
+  late ScrollController _scrollController;
+
   int tabIndex = 0;
+
+  late Timer switchTimer;
+
+  late Timer scrollTimer;
+
+  late double listViewHeight;
+
+  double offset = 0;
+
+  String nowTime = '';
+
+  late Timer dateTimer;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
+    _scrollController = ScrollController();
     _tabController.addListener(() {
       //点击tab回调一次，滑动切换tab不会回调
       if (_tabController.indexIsChanging) {
         setState(() {
           tabIndex = _tabController.index;
+          offset = 0;
         });
       }
     });
+    _scrollController.addListener(() {
+      offset = _scrollController.offset;
+    });
+    setTimingSwitchTab();
+    setListViewJump();
+    getNowTime();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
+    _scrollController.dispose();
+    switchTimer.cancel();
+    scrollTimer.cancel();
+    dateTimer.cancel();
     super.dispose();
   }
 
   /*
-   * @desc 处理从websockt获取的表格数据 
+   * @desc 设置当前时间
+   */
+  void getNowTime() {
+    dateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        nowTime = formatDate(DateTime.now(),
+            [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+      });
+    });
+  }
+
+  /*
+   * @desc 初始化Provider 
+   */
+  void initProvider(context) {
+    listViewHeight = MediaQuery.of(context).size.height - 162 - 50 - 40 - 30;
+    provider = Provider.of<HomeProvider>(context);
+    provider.addListener(() {
+      setState(() {
+        storeLogList = provider.socketInfo['storeList'];
+        toolLogList = provider.socketInfo['toolIncorrectList'];
+      });
+    });
+  }
+
+  /*
+   * @desc 设置定时切换Tab
    **/
-  void formatTableData() {
-    switch (provider.socketInfo['type']) {
-      case 'toolLog':
-        var temp = [...toolLogList];
-        // 如果大于10条则删除最后一条
-        if (temp.length > 10) {
-          temp.removeAt(temp.length - 1);
-        }
-        // 向首部插入
-        temp.insert(0, provider.socketInfo);
+  void setTimingSwitchTab() {
+    switchTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      if (tabIndex == 0) {
         setState(() {
-          toolLogList = temp;
           tabIndex = 1;
           _tabController.index = 1;
         });
-        break;
-    }
+      } else {
+        setState(() {
+          tabIndex = 0;
+          _tabController.index = 0;
+        });
+      }
+    });
+  }
+
+  /*
+   * @desc 设置列表滚动 
+   */
+  void setListViewJump() {
+    scrollTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      List sourceData = tabIndex == 0 ? storeLogList : toolLogList;
+      if (sourceData.length * 40 - offset > listViewHeight) {
+        offset += 40;
+      } else {
+        offset = 0;
+      }
+      _scrollController.animateTo((offset),
+          duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    });
   }
 
   /*
    * @desc 渲染Header
    **/
   Widget renderHeader() {
-    var headerWrap = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        const Text(
-          '2021-12-28 10:43:37',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+    var headerWrap = Container(
+      width: MediaQuery.of(context).size.width,
+      height: 60,
+      // alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.fill,
+          image: AssetImage('assets/images/header-bg.png'),
         ),
-        Container(
-          width: 400,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.contain,
-              image: AssetImage('assets/images/header-title-bg.png'),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text(
+              nowTime,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
-          child: const Text(
-            '智慧仓储大屏',
-            style: TextStyle(
-              color: Color.fromRGBO(18, 155, 255, 1),
-              fontSize: 44,
+          const Expanded(
+            flex: 1,
+            child: Text(
+              '智慧仓储大屏',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Color.fromRGBO(18, 155, 255, 1),
+                fontSize: 30,
+              ),
             ),
           ),
-        ),
-        const Text(
-          '多云 12℃',
-          style: TextStyle(
-            color: Colors.white,
+          const Expanded(
+            flex: 1,
+            child: Text(
+              '多云 12℃',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+
     return headerWrap;
   }
 
@@ -155,8 +447,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                   children: [
                     Expanded(
                       child: Row(
-                        children: const [
-                          Padding(
+                        children: [
+                          const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               '工器具类型',
@@ -166,8 +458,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Text(
-                            '999',
-                            style: TextStyle(
+                            overviewData['toolTypeNum'],
+                            style: const TextStyle(
                               color: Color.fromRGBO(18, 155, 255, 1),
                               fontSize: 36,
                             ),
@@ -177,8 +469,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     ),
                     Expanded(
                       child: Row(
-                        children: const [
-                          Padding(
+                        children: [
+                          const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               '工器具总数量',
@@ -188,8 +480,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Text(
-                            '999',
-                            style: TextStyle(
+                            overviewData['toolNum'],
+                            style: const TextStyle(
                               color: Color.fromRGBO(18, 155, 255, 1),
                               fontSize: 36,
                             ),
@@ -199,8 +491,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     ),
                     Expanded(
                       child: Row(
-                        children: const [
-                          Padding(
+                        children: [
+                          const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               '总仓位',
@@ -210,8 +502,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Text(
-                            '999',
-                            style: TextStyle(
+                            overviewData['storeNum'],
+                            style: const TextStyle(
                               color: Color.fromRGBO(18, 155, 255, 1),
                               fontSize: 36,
                             ),
@@ -252,8 +544,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                   children: [
                     Expanded(
                       child: Row(
-                        children: const [
-                          Padding(
+                        children: [
+                          const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               '领取数量',
@@ -263,8 +555,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Text(
-                            '999',
-                            style: TextStyle(
+                            overviewData['receiveNum'],
+                            style: const TextStyle(
                               color: Color.fromRGBO(18, 155, 255, 1),
                               fontSize: 36,
                             ),
@@ -274,8 +566,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     ),
                     Expanded(
                       child: Row(
-                        children: const [
-                          Padding(
+                        children: [
+                          const Padding(
                             padding: EdgeInsets.only(right: 10),
                             child: Text(
                               '归还数量',
@@ -285,8 +577,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                             ),
                           ),
                           Text(
-                            '999',
-                            style: TextStyle(
+                            overviewData['returnNum'],
+                            style: const TextStyle(
                               color: Color.fromRGBO(18, 155, 255, 1),
                               fontSize: 36,
                             ),
@@ -309,6 +601,22 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    * @desc 渲染Tabs 
    **/
   Widget renderTabs() {
+    List<String> header = tabIndex == 0 ? freightSpaceHeader : toolHeader;
+    List<String> rowKey = tabIndex == 0 ? freightSpaceRowKey : toolRowKey;
+    List sourceData = tabIndex == 0 ? storeLogList : toolLogList;
+
+    List<Widget> listHeader = header.map((item) {
+      return Expanded(
+        child: Text(
+          item,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      );
+    }).toList();
+
     var tabsWrap = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -316,17 +624,62 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
           width: 220,
           child: TabBar(
             controller: _tabController,
-            indicator: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromRGBO(18, 155, 255, 1),
-              ),
-            ),
-            tabs: const [
-              Tab(
-                child: Text(
-                  '仓位状态',
-                  style: TextStyle(color: Colors.white),
-                ),
+            // indicator: BoxDecoration(
+            //   border: Border.all(
+            //     color: const Color.fromRGBO(18, 155, 255, 1),
+            //   ),
+            // ),
+            tabs: [
+              // Tab(
+              //   child: Container(
+              //     width: 220,
+              //     height: 50,
+              //     decoration: const BoxDecoration(
+              //       image: DecorationImage(
+              //         fit: BoxFit.cover,
+              //         image: AssetImage('assets/images/tab-bg.png'),
+              //         alignment: Alignment.bottomCenter,
+              //       ),
+              //     ),
+              //     child: Text(
+              //       '仓位状态',
+              //       style: TextStyle(color: Colors.white),
+              //     ),
+              //   ),
+              // ),
+              // Container(
+              //   width: 220,
+              //   height: 30,
+              //   decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //       fit: BoxFit.cover,
+              //       image: AssetImage('assets/images/tab-bg.png'),
+              //       alignment: Alignment.center,
+              //     ),
+              //   ),
+              //   child: Text(
+              //     '仓位状态',
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ),
+              // Container(
+              //   width: 220,
+              //   height: 30,
+              //   decoration: const BoxDecoration(
+              //     image: DecorationImage(
+              //       fit: BoxFit.contain,
+              //       image: AssetImage('assets/images/tab-bg.png'),
+              //       alignment: Alignment.bottomCenter,
+              //     ),
+              //   ),
+              //   child: Text(
+              //     '异常工器具',
+              //     style: TextStyle(color: Colors.white),
+              //   ),
+              // ),
+              Text(
+                '仓位状态',
+                style: TextStyle(color: Colors.white),
               ),
               Tab(
                 child: Text(
@@ -337,10 +690,35 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
-        tabIndex == 0
-            ? renderTable(
-                freightSpaceHeader, freightSpaceRowKey, freightSpaceLogList)
-            : renderTable(toolHeader, toolRowKey, toolLogList)
+        // 表头
+        Container(
+          height: 40,
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(14, 43, 69, 1),
+            border: Border(
+              left: BorderSide(
+                color: Color.fromRGBO(18, 155, 255, 1),
+              ),
+              right: BorderSide(
+                color: Color.fromRGBO(18, 155, 255, 1),
+              ),
+              top: BorderSide(
+                color: Color.fromRGBO(18, 155, 255, 1),
+              ),
+            ),
+          ),
+          child: Row(
+            children: listHeader,
+          ),
+        ),
+        Container(
+            height: listViewHeight,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: const Color.fromRGBO(18, 155, 255, 1),
+              ),
+            ),
+            child: renderTable(header, rowKey, sourceData)),
       ],
     );
 
@@ -353,8 +731,8 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   Widget renderTable(
       List<String> tableHeader, List<String> rowKey, List sourceData) {
     // 列表行
-    List<TableRow> tableRowList = sourceData.map((item) {
-      return TableRow(
+    List<Widget> listViewWrap = sourceData.map((item) {
+      return Container(
         decoration: const BoxDecoration(
           border: Border(
             bottom: BorderSide(
@@ -362,54 +740,20 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
             ),
           ),
         ),
-        children: renderField(rowKey, item),
-        // renderField(rowKey, item)
+        child: Row(
+          children: renderField(rowKey, item),
+        ),
+        // children: ,
       );
     }).toList();
     // 生成表格
-    Table tableWrap = Table(
-      border: const TableBorder(
-        top: BorderSide(
-          color: Color.fromRGBO(18, 155, 255, 1),
-          width: 1,
-          style: BorderStyle.solid,
-        ),
-        left: BorderSide(
-          color: Color.fromRGBO(18, 155, 255, 1),
-          width: 1,
-          style: BorderStyle.solid,
-        ),
-        right: BorderSide(
-          color: Color.fromRGBO(18, 155, 255, 1),
-          width: 1,
-          style: BorderStyle.solid,
-        ),
-      ),
-      children: [
-        TableRow(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(14, 43, 69, 1),
-            border: Border(
-              bottom: BorderSide(
-                color: Color.fromRGBO(18, 155, 255, 1),
-              ),
-            ),
-          ),
-          children: tableHeader.map((item) {
-            return Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
-              child: Text(
-                item,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-            );
-          }).toList(),
-        ),
-        ...tableRowList,
-      ],
+    ListView tableWrap = ListView.builder(
+      itemCount: listViewWrap.length,
+      itemExtent: 40,
+      controller: _scrollController,
+      itemBuilder: (BuildContext context, int index) {
+        return listViewWrap[index];
+      },
     );
 
     return tableWrap;
@@ -420,10 +764,10 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    **/
   List<Widget> renderField(List<String> keyList, Map sourceMap) {
     return keyList.map((item) {
-      return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10.0),
+      return Expanded(
         child: Text(
           sourceMap[item],
+          textAlign: TextAlign.center,
           style: const TextStyle(
             color: Colors.white,
           ),
@@ -434,32 +778,36 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<HomeProvider>(context);
-    provider.addListener(() {
-      formatTableData();
-    });
-    return SingleChildScrollView(
-      child: Container(
-        constraints: BoxConstraints(
-          minHeight: MediaQuery.of(context).size.height,
+    initProvider(context);
+    return Container(
+      constraints: BoxConstraints(
+        minHeight: MediaQuery.of(context).size.height,
+      ),
+      decoration: const BoxDecoration(
+        color: Color(0xFF040404),
+        image: DecorationImage(
+          fit: BoxFit.contain,
+          image: AssetImage('assets/images/footer.png'),
+          alignment: Alignment.bottomCenter,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 50.0),
-        decoration: const BoxDecoration(
-          color: Color(0xFF040404),
-        ),
-        child: Column(
-          children: [
-            renderHeader(),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 30,
-                bottom: 20,
-              ),
-              child: renderOverview(),
+      ),
+      child: Column(
+        children: [
+          renderHeader(),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: 10,
+              bottom: 10,
+              left: 50,
+              right: 50,
             ),
-            renderTabs(),
-          ],
-        ),
+            child: renderOverview(),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: renderTabs(),
+          ),
+        ],
       ),
     );
   }

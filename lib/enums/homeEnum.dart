@@ -8,12 +8,12 @@ List<String> freightSpaceHeader = <String>[
 ];
 
 List<String> freightSpaceRowKey = [
-  'content',
-  'content',
-  'content',
-  'content',
-  'msgTime',
-  'content',
+  'name',
+  'toolExpectSum',
+  'toolInSum',
+  'toolLeaveSum',
+  'toolLeaveSum',
+  'toolIncorrectSum',
 ];
 
 List<String> toolHeader = [
@@ -24,16 +24,14 @@ List<String> toolHeader = [
   '型号',
   '当前仓位',
   '正确仓位',
-  '归还情况'
 ];
 
 List<String> toolRowKey = [
-  'content',
-  'content',
-  'content',
-  'content',
-  'msgTime',
-  'content',
-  'msgTime',
-  'msgTime',
+  'name',
+  'bidNo',
+  'toolTypeName',
+  'toolTagName',
+  'id',
+  'currentPosition',
+  'expectPosition',
 ];
