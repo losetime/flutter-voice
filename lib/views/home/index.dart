@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:date_format/date_format.dart';
 import 'dart:async';
 import '../../provider/globalProvider.dart';
 import '../../enums/homeEnum.dart'
     show freightSpaceHeader, freightSpaceRowKey, toolHeader, toolRowKey;
+import '../../components/home/header.dart';
 
 class HomeIndex extends StatefulWidget {
   const HomeIndex({Key? key}) : super(key: key);
@@ -17,226 +17,26 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   List toolLogList = [];
 
   List storeLogList = [
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
-    {
-      "antennaNum": "3",
-      "bidNo": "1626WN15009R0101",
-      "createTime": "2022-04-19 11:13:39",
-      "delFlag": "0",
-      "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-      "id": "N-hSYsQUmAyE-Rf12TIU6",
-      "layStatus": "1",
-      "name": "仓位1-2",
-      "readerMac": "19216835128",
-      "remark": "螺丝刀",
-      "status": "1",
-      "toolCorrectSum": '0',
-      "toolExpectSum": '0',
-      "toolInSum": '0',
-      "toolIncorrectSum": '0',
-      "toolLeaveSum": '0',
-      "updateTime": "2022-05-24 10:27:00",
-      "expectPosition": '123'
-    },
+    // {
+    //   "antennaNum": "3",
+    //   "bidNo": "1626WN15009R0101",
+    //   "createTime": "2022-04-19 11:13:39",
+    //   "delFlag": "0",
+    //   "houseId": "-97Ru2KlTN7-M-fv2QQi2",
+    //   "id": "N-hSYsQUmAyE-Rf12TIU6",
+    //   "layStatus": "1",
+    //   "name": "仓位1-2",
+    //   "readerMac": "19216835128",
+    //   "remark": "螺丝刀",
+    //   "status": "1",
+    //   "toolCorrectSum": '0',
+    //   "toolExpectSum": '0',
+    //   "toolInSum": '0',
+    //   "toolIncorrectSum": '0',
+    //   "toolLeaveSum": '0',
+    //   "updateTime": "2022-05-24 10:27:00",
+    //   "expectPosition": '123'
+    // },
   ];
 
   Map overviewData = {
@@ -261,10 +61,6 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
 
   double offset = 0;
 
-  String nowTime = '';
-
-  late Timer dateTimer;
-
   @override
   void initState() {
     super.initState();
@@ -284,7 +80,6 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
     });
     setTimingSwitchTab();
     setListViewJump();
-    getNowTime();
   }
 
   @override
@@ -293,20 +88,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
     _scrollController.dispose();
     switchTimer.cancel();
     scrollTimer.cancel();
-    dateTimer.cancel();
     super.dispose();
-  }
-
-  /*
-   * @desc 设置当前时间
-   */
-  void getNowTime() {
-    dateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        nowTime = formatDate(DateTime.now(),
-            [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
-      });
-    });
   }
 
   /*
@@ -327,7 +109,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    * @desc 设置定时切换Tab
    **/
   void setTimingSwitchTab() {
-    switchTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    switchTimer = Timer.periodic(const Duration(seconds: 20), (timer) {
       if (tabIndex == 0) {
         setState(() {
           tabIndex = 1;
@@ -356,61 +138,6 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
       _scrollController.animateTo((offset),
           duration: const Duration(milliseconds: 200), curve: Curves.ease);
     });
-  }
-
-  /*
-   * @desc 渲染Header
-   **/
-  Widget renderHeader() {
-    var headerWrap = Container(
-      width: MediaQuery.of(context).size.width,
-      height: 60,
-      // alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          image: AssetImage('assets/images/header-bg.png'),
-        ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            flex: 1,
-            child: Text(
-              nowTime,
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const Expanded(
-            flex: 1,
-            child: Text(
-              '智慧仓储大屏',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color.fromRGBO(18, 155, 255, 1),
-                fontSize: 30,
-              ),
-            ),
-          ),
-          const Expanded(
-            flex: 1,
-            child: Text(
-              '多云 12℃',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    return headerWrap;
   }
 
   /*
@@ -793,7 +520,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
       ),
       child: Column(
         children: [
-          renderHeader(),
+          const HeaderWrap(),
           Padding(
             padding: const EdgeInsets.only(
               top: 10,

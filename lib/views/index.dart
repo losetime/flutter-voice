@@ -36,7 +36,7 @@ class _IndexPageState extends State<IndexPage> {
 
   List<Map> voiceList = [];
 
-  int currentIndex = 0;
+  int currentIndex = 2;
   // var currentPage;
 
   @override
@@ -61,17 +61,18 @@ class _IndexPageState extends State<IndexPage> {
         case 'toolScreenData':
           provider.setSocketInfo(result['data']);
           // 判断跳转哪个页面
-          switch (result['data']['screenEvent']) {
-            case 'returned':
-              setState(() {
-                currentIndex = 1;
-              });
-              break;
-            case 'recipiented':
-              setState(() {
-                currentIndex = 2;
-              });
-              break;
+          int eventMark = result['data']['screenEvent'];
+          const returned = [0, 7, 8]; // 归还
+          const recipiented = [1]; // 领用
+          if (returned.contains(eventMark)) {
+            setState(() {
+              currentIndex = 1;
+            });
+          }
+          if (recipiented.contains(eventMark)) {
+            setState(() {
+              currentIndex = 2;
+            });
           }
           break;
         // 语音播报
