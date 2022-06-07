@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:date_format/date_format.dart';
 import 'dart:async';
 import '../../components/common/weather.dart';
+import 'package:provider/provider.dart';
+import '../../provider/globalProvider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import '../../utils/app_cache.dart';
 
 class HeaderWrap extends StatefulWidget {
   const HeaderWrap({Key? key}) : super(key: key);
@@ -11,20 +15,44 @@ class HeaderWrap extends StatefulWidget {
 
 class _HeaderWrap extends State<HeaderWrap>
     with SingleTickerProviderStateMixin {
+  late DomainProvider provider;
+
   String nowTime = '';
+
+  String domainHost = '';
 
   late Timer dateTimer;
 
+  late TextEditingController _textFieldController;
+
   @override
   void initState() {
-    getNowTime();
     super.initState();
+    getNowTime();
+    _textFieldController = TextEditingController();
+    _textFieldController.addListener(() {
+      _textFieldController.value = _textFieldController.value.copyWith(
+          text: 'ws://192.168.35.159:32244/person/websocket/toolScreen');
+    });
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      if (AppCache.host!.isNotEmpty) {
+        print('AppCacheHost, ${AppCache.host}');
+        provider.setDomainHost(AppCache.host as String);
+      }
+    });
   }
 
   @override
   void dispose() {
     dateTimer.cancel();
     super.dispose();
+  }
+
+  /*
+   * @desc 初始化Provider 
+   */
+  void initProvider(context) {
+    provider = Provider.of<DomainProvider>(context);
   }
 
   /*
@@ -39,8 +67,46 @@ class _HeaderWrap extends State<HeaderWrap>
     });
   }
 
+  /*
+   * @desc 设置域名
+   */
+  void setDomain() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('请输入连接地址'),
+          content: TextField(
+            controller: _textFieldController,
+            autofocus: true, // 输入完成回调
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(0),
+              child: const Text('取消'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_textFieldController.text.isEmpty) {
+                  Fluttertoast.showToast(msg: '域名地址不能为空');
+                } else {
+                  provider.setDomainHost(_textFieldController.text);
+                  AppCache.setHost(_textFieldController.text);
+                  Navigator.of(context).pop(0);
+                }
+              },
+              child: const Text('确定'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    initProvider(context);
     return Container(
       width: MediaQuery.of(context).size.width,
       height: 60,
@@ -79,7 +145,20 @@ class _HeaderWrap extends State<HeaderWrap>
             flex: 1,
             child: RealTimeWeather(),
           ),
+          // const Expanded(
+          //   flex: 1,
+          //   child:
+          // ),
           // const RealTimeWeather(),
+          IconButton(
+            padding: EdgeInsets.zero,
+            icon: const Icon(
+              IconData(0xe615, fontFamily: 'AliIcon', matchTextDirection: true),
+              size: 16,
+              color: Color.fromRGBO(33, 150, 243, 1),
+            ),
+            onPressed: setDomain,
+          )
         ],
       ),
     );

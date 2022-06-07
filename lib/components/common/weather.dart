@@ -12,7 +12,6 @@ class _RealTimeWeather extends State<RealTimeWeather>
     with SingleTickerProviderStateMixin {
   String weatherStatus = '';
   String temperature = '';
-  int weatherImg = 0xe615;
 
   @override
   void initState() {
@@ -31,7 +30,6 @@ class _RealTimeWeather extends State<RealTimeWeather>
       setState(() {
         weatherStatus = result['wea'];
         temperature = result['tem'] + '℃';
-        weatherImg = handleWeatherImg(result['wea_img']);
       });
     } catch (e) {
       print(e);
@@ -41,28 +39,38 @@ class _RealTimeWeather extends State<RealTimeWeather>
   /*
    * @desc 处理天气图标
    */
-  handleWeatherImg(weaStatus) {
-    switch (weaStatus) {
+  IconData getWeatherIcon() {
+    switch (weatherStatus) {
       case 'yun':
-        return 0xe617;
+        return const IconData(0xe617,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'qing':
-        return 0xe615;
+        return const IconData(0xe615,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'yin':
-        return 0xe61d;
+        return const IconData(0xe61d,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'yu':
-        return 0xe61a;
+        return const IconData(0xe61a,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'xue':
-        return 0xe61b;
+        return const IconData(0xe61b,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'lei':
-        return 0xe61e;
+        return const IconData(0xe61e,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'shachen':
-        return 0xe61f;
+        return const IconData(0xe61f,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'wu':
-        return 0xe620;
+        return const IconData(0xe620,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       case 'bingbao':
-        return 0xe622;
+        return const IconData(0xe622,
+            fontFamily: 'AliIcon', matchTextDirection: true);
       default:
-        return 0xe615;
+        return const IconData(0xe615,
+            fontFamily: 'AliIcon', matchTextDirection: true);
     }
   }
 
@@ -72,8 +80,7 @@ class _RealTimeWeather extends State<RealTimeWeather>
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Icon(
-          IconData(weatherImg,
-              fontFamily: 'iconfont', matchTextDirection: true),
+          getWeatherIcon(),
           size: 16,
           color: const Color.fromRGBO(33, 150, 243, 1),
         ),

@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart'; //卡片式主题
-import 'package:flutter/cupertino.dart'; //ios式风格
-import 'package:flutter/rendering.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import './provider/globalProvider.dart';
 import './views/index.dart';
+import './utils/app_cache.dart';
 
-void main() {
+void main() async {
   // debugPaintSizeEnabled = true;
+  //  这条语句一定要加上，不然会报错
+  WidgetsFlutterBinding.ensureInitialized();
+  //  初始化缓存工具类
+  await AppCache.init();
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
+        ChangeNotifierProvider(create: (_) => DomainProvider()),
       ],
       child: MyApp(),
     ),
@@ -25,7 +29,7 @@ class MyApp extends StatelessWidget {
     // 设置沉浸式状态栏
     if (Platform.isAndroid) {
       SystemUiOverlayStyle systemUiOverlayStyle =
-          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+          const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     }
 
@@ -33,8 +37,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'PCD Cloud',
         debugShowCheckedModeBanner: false, //是否显示app右上角的debug标志
-        theme: ThemeData(primaryColor: Color.fromRGBO(41, 175, 124, 1)),
-        home: IndexPage(),
+        theme: ThemeData(primaryColor: const Color.fromRGBO(41, 175, 124, 1)),
+        home: const IndexPage(),
       ),
     );
   }

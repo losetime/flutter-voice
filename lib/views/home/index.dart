@@ -16,28 +16,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   late HomeProvider provider;
   List toolLogList = [];
 
-  List storeLogList = [
-    // {
-    //   "antennaNum": "3",
-    //   "bidNo": "1626WN15009R0101",
-    //   "createTime": "2022-04-19 11:13:39",
-    //   "delFlag": "0",
-    //   "houseId": "-97Ru2KlTN7-M-fv2QQi2",
-    //   "id": "N-hSYsQUmAyE-Rf12TIU6",
-    //   "layStatus": "1",
-    //   "name": "仓位1-2",
-    //   "readerMac": "19216835128",
-    //   "remark": "螺丝刀",
-    //   "status": "1",
-    //   "toolCorrectSum": '0',
-    //   "toolExpectSum": '0',
-    //   "toolInSum": '0',
-    //   "toolIncorrectSum": '0',
-    //   "toolLeaveSum": '0',
-    //   "updateTime": "2022-05-24 10:27:00",
-    //   "expectPosition": '123'
-    // },
-  ];
+  List storeLogList = [];
 
   Map overviewData = {
     'receiveNum': '',
@@ -95,12 +74,13 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    * @desc 初始化Provider 
    */
   void initProvider(context) {
-    listViewHeight = MediaQuery.of(context).size.height - 162 - 50 - 40 - 30;
+    listViewHeight = MediaQuery.of(context).size.height - 162 - 35 - 40 - 30;
     provider = Provider.of<HomeProvider>(context);
     provider.addListener(() {
       setState(() {
         storeLogList = provider.socketInfo['storeList'];
         toolLogList = provider.socketInfo['toolIncorrectList'];
+        overviewData = provider.socketInfo['toolSum'];
       });
     });
   }
@@ -346,71 +326,49 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
 
     var tabsWrap = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(
           width: 220,
+          height: 35,
           child: TabBar(
             controller: _tabController,
-            // indicator: BoxDecoration(
-            //   border: Border.all(
-            //     color: const Color.fromRGBO(18, 155, 255, 1),
-            //   ),
-            // ),
-            tabs: [
-              // Tab(
-              //   child: Container(
-              //     width: 220,
-              //     height: 50,
-              //     decoration: const BoxDecoration(
-              //       image: DecorationImage(
-              //         fit: BoxFit.cover,
-              //         image: AssetImage('assets/images/tab-bg.png'),
-              //         alignment: Alignment.bottomCenter,
-              //       ),
-              //     ),
-              //     child: Text(
-              //       '仓位状态',
-              //       style: TextStyle(color: Colors.white),
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   width: 220,
-              //   height: 30,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.cover,
-              //       image: AssetImage('assets/images/tab-bg.png'),
-              //       alignment: Alignment.center,
-              //     ),
-              //   ),
-              //   child: Text(
-              //     '仓位状态',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-              // Container(
-              //   width: 220,
-              //   height: 30,
-              //   decoration: const BoxDecoration(
-              //     image: DecorationImage(
-              //       fit: BoxFit.contain,
-              //       image: AssetImage('assets/images/tab-bg.png'),
-              //       alignment: Alignment.bottomCenter,
-              //     ),
-              //   ),
-              //   child: Text(
-              //     '异常工器具',
-              //     style: TextStyle(color: Colors.white),
-              //   ),
-              // ),
-              Text(
-                '仓位状态',
-                style: TextStyle(color: Colors.white),
+            indicator: const BoxDecoration(
+              gradient: LinearGradient(
+                //渐变位置
+                begin: Alignment.topCenter, //右上
+                end: Alignment.bottomCenter, //左下
+                stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
+                //渐变颜色[始点颜色, 结束颜色]
+                colors: [
+                  Color.fromRGBO(18, 155, 255, 0.4),
+                  Color.fromRGBO(18, 155, 255, 1),
+                ],
+              ),
+              border: Border(
+                top: BorderSide(
+                  color: Color.fromRGBO(18, 155, 255, 1),
+                ),
+                left: BorderSide(
+                  color: Color.fromRGBO(18, 155, 255, 1),
+                ),
+                right: BorderSide(
+                  color: Color.fromRGBO(18, 155, 255, 1),
+                ),
+              ),
+            ),
+            tabs: const [
+              Tab(
+                child: Text(
+                  '仓位状态',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               Tab(
                 child: Text(
                   '异常工器具',
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.white),
                 ),
               ),

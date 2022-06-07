@@ -7,7 +7,10 @@ import 'package:provider/provider.dart';
 import '../../provider/globalProvider.dart';
 import 'home/index.dart';
 import 'toolReturned/index.dart';
-import 'toolOut/index.dart';
+import 'toolReceive/index.dart';
+import 'dart:developer' as developer;
+import 'package:fluttertoast/fluttertoast.dart';
+import 'dart:async';
 
 // 动态组件
 class IndexPage extends StatefulWidget {
@@ -19,6 +22,7 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   late HomeProvider provider;
+  late DomainProvider domainProvider;
   final List<BottomNavigationBarItem> bottomTabs = [
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.car_detailed), label: '主页'),
@@ -29,65 +33,56 @@ class _IndexPageState extends State<IndexPage> {
   final List<Widget> tabBodies = [
     const HomeIndex(),
     const ToolReturned(),
-    const ToolOut()
+    const ToolReceive()
   ];
 
   late FlutterTts flutterTts;
 
+  late IOWebSocketChannel channel;
+
   List<Map> voiceList = [];
 
-  int currentIndex = 2;
+  int currentIndex = 0;
   // var currentPage;
 
   @override
   void initState() {
     // currentPage = tabBodies[currentIndex];
     super.initState();
-    initWebSocket();
+    // initWebSocket();
     initTts();
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close(); //关闭连接通道
+    super.dispose();
+  }
+
+  /*
+   * @desc 初始化Provider 
+   */
+  void initProvider(context) {
+    provider = Provider.of<HomeProvider>(context);
+    domainProvider = Provider.of<DomainProvider>(context);
+    domainProvider.addListener(() {
+      print(domainProvider.domainHost);
+      initWebSocket();
+    });
   }
 
   /*
    * @desc 创建websocket连接
    **/
   void initWebSocket() async {
-    IOWebSocketChannel channel = IOWebSocketChannel.connect(
-        Uri.parse('ws://192.168.35.159:32244/person/websocket/toolScreen'));
-    channel.stream.listen((message) {
-      Map<String, dynamic> result = jsonDecode(message);
-      print(result);
-      switch (result['type']) {
-        // 更新列表
-        case 'toolScreenData':
-          provider.setSocketInfo(result['data']);
-          // 判断跳转哪个页面
-          int eventMark = result['data']['screenEvent'];
-          const returned = [0, 7, 8]; // 归还
-          const recipiented = [1]; // 领用
-          if (returned.contains(eventMark)) {
-            setState(() {
-              currentIndex = 1;
-            });
-          }
-          if (recipiented.contains(eventMark)) {
-            setState(() {
-              currentIndex = 2;
-            });
-          }
-          break;
-        // 语音播报
-        case 'toolLog':
-          if (voiceList.isEmpty) {
-            // 语音播报列表如果为空，插入数据，并启动播报
-            voiceList.add(result);
-            voiceBroadcast();
-          } else {
-            // 直接插入
-            voiceList.add(result);
-          }
-          break;
-      }
-    });
+    if (domainProvider.domainHost.isNotEmpty) {
+      channel =
+          IOWebSocketChannel.connect(Uri.parse(domainProvider.domainHost));
+      channel.stream.listen(onWebsocketSuccess,
+          onDone: onWebsocketDone, onError: onWebsocketError);
+    } else {
+      Fluttertoast.showToast(msg: '域名地址不能为空');
+    }
   }
 
   /*
@@ -103,20 +98,72 @@ class _IndexPageState extends State<IndexPage> {
    * @desc 语音播报队列
    **/
   void voiceBroadcast() {
-    flutterTts.speak(voiceList[0]['content']).then(
-          (value) => {
-            voiceList.removeAt(0),
-            if (voiceList.isNotEmpty)
-              {
-                voiceBroadcast(),
-              }
-          },
-        );
+    flutterTts.speak(voiceList[0]['content']);
+    flutterTts.setCompletionHandler(() {
+      voiceList.removeAt(0);
+      if (voiceList.isNotEmpty) {
+        voiceBroadcast();
+      }
+    });
+  }
+
+  void onWebsocketSuccess(message) {
+    Map result = jsonDecode(message);
+    // print(result);
+    developer.log('输出日志', name: 'websocket响应', error: message);
+    switch (result['type']) {
+      // 更新列表
+      case 'toolScreenData':
+        provider.setSocketInfo(result['data']);
+        // 判断跳转哪个页面
+        String eventMark = result['data']['screenEvent'];
+        switch (eventMark) {
+          case 'overview':
+            setState(() {
+              currentIndex = 0;
+            });
+            break;
+          case 'returned':
+            setState(() {
+              currentIndex = 1;
+            });
+            break;
+          case 'recipiented':
+            setState(() {
+              currentIndex = 2;
+            });
+            break;
+        }
+        break;
+      // 语音播报
+      case 'toolLog':
+        if (voiceList.isEmpty) {
+          // 语音播报列表如果为空，插入数据，并启动播报
+          voiceList.add(result);
+          voiceBroadcast();
+        } else {
+          // 直接插入
+          voiceList.add(result);
+        }
+        break;
+    }
+  }
+
+  void onWebsocketError(error) {
+    print('失败, 关闭');
+    channel.sink.close(); //关闭连接通道
+  }
+
+  void onWebsocketDone() {
+    print('重连');
+    Future.delayed(const Duration(seconds: 10), () {
+      initWebSocket();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    provider = Provider.of<HomeProvider>(context);
+    initProvider(context);
     return Scaffold(
       // backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       // bottomNavigationBar: BottomNavigationBar(

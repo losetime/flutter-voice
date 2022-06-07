@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 import '../../provider/globalProvider.dart';
 import '../../components/home/header.dart';
 
-class ToolReturned extends StatefulWidget {
-  const ToolReturned({Key? key}) : super(key: key);
+class ToolReceive extends StatefulWidget {
+  const ToolReceive({Key? key}) : super(key: key);
   @override
-  State<ToolReturned> createState() => _ToolReturned();
+  State<ToolReceive> createState() => _ToolReceive();
 }
 
-class _ToolReturned extends State<ToolReturned>
+class _ToolReceive extends State<ToolReceive>
     with SingleTickerProviderStateMixin {
   late HomeProvider provider;
 
@@ -17,7 +17,7 @@ class _ToolReturned extends State<ToolReturned>
 
   Map toolStats = {};
 
-  List sourceData = [{}];
+  List sourceData = [];
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ class _ToolReturned extends State<ToolReturned>
     provider = Provider.of<HomeProvider>(context);
     provider.addListener(() {
       setState(() {
-        sourceData = provider.socketInfo['toolRetList'];
+        sourceData = provider.socketInfo['toolRecList'];
         personInfo = provider.socketInfo.containsKey('peopleInfo')
             ? provider.socketInfo['peopleInfo']
             : {};
@@ -117,12 +117,10 @@ class _ToolReturned extends State<ToolReturned>
   }
 
   /*
-   * @desc 归还情况
+   * @desc 领用情况
    */
   Widget renderReturned() {
     String receiveNum = toolStats.isNotEmpty ? toolStats['receiveNum'] : '';
-    String returnNum = toolStats.isNotEmpty ? toolStats['returnNum'] : '';
-    String restNum = toolStats.isNotEmpty ? toolStats['restNum'] : '';
     Widget returnedWrap = Container(
       width: 300,
       height: 190,
@@ -131,8 +129,8 @@ class _ToolReturned extends State<ToolReturned>
         color: const Color.fromRGBO(11, 40, 66, 1),
         borderRadius: BorderRadius.circular(10.0), //3像素圆角
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             flex: 1,
@@ -140,7 +138,7 @@ class _ToolReturned extends State<ToolReturned>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  '归还情况',
+                  '本次领用情况',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
@@ -167,13 +165,13 @@ class _ToolReturned extends State<ToolReturned>
           ),
           Expanded(
             flex: 1,
-            child: Column(
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     const Text(
-                      '领用总数',
+                      '领用总数 ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -182,48 +180,19 @@ class _ToolReturned extends State<ToolReturned>
                     Text(
                       receiveNum,
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
+                        color: Color.fromRGBO(18, 155, 255, 1),
+                        fontSize: 36,
                       ),
                     ),
                   ],
                 ),
-                Row(
-                  children: [
-                    const Text(
-                      '本次归还',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      returnNum,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
+                const Text(
+                  '领用完成',
+                  style: TextStyle(
+                    color: Color.fromRGBO(26, 155, 39, 1),
+                    fontSize: 30,
+                  ),
                 ),
-                Row(
-                  children: [
-                    const Text(
-                      '剩余数量',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                    Text(
-                      restNum,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
           ),
@@ -238,28 +207,9 @@ class _ToolReturned extends State<ToolReturned>
    */
   List<Widget> renderCardInfo() {
     List<Widget> cardInfoList = sourceData.map((item) {
+      print('model: ${item['model']}');
       String imgPath = 'assets/images/daiguihuan.png';
-      String statusLabel = '';
       Color statusColor = const Color.fromRGBO(18, 155, 255, 1);
-      if (item.isNotEmpty) {
-        switch (item['status']) {
-          case '8': // 待归还
-            imgPath = 'assets/images/daiguihuan.png';
-            statusLabel = '待归还';
-            statusColor = const Color.fromRGBO(18, 155, 255, 1);
-            break;
-          case '7': // 归还错误
-            imgPath = 'assets/images/guihuancuowu.png';
-            statusLabel = '归还错误';
-            statusColor = const Color.fromRGBO(204, 34, 34, 1);
-            break;
-          case '0': // 归还完成
-            imgPath = 'assets/images/guihuanwancheng.png';
-            statusLabel = '归还完成';
-            statusColor = const Color.fromRGBO(45, 201, 97, 1);
-            break;
-        }
-      }
       return Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
         decoration: BoxDecoration(
@@ -272,97 +222,136 @@ class _ToolReturned extends State<ToolReturned>
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 2,
-                    color: statusColor,
-                  ),
-                ),
-              ),
-              child: Text(
-                '工器具名称：${item['toolName']}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  // fontSize: 32,
-                ),
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.only(left: 10),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: 2,
-                    color: statusColor,
-                  ),
-                ),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '器具编号：${item['codeNumber']}',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      // fontSize: 18,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      '工器具名称：${item['toolName']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                  Text(
-                    '放至',
-                    style: TextStyle(
-                      color: statusColor,
-                      // fontSize: 20,
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      '器具编号：${item['codeNumber']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
-                  Text(
-                    '${item['expectPosition']}',
-                    style: TextStyle(
-                      color: statusColor,
-                      // fontSize: 30,
-                    ),
-                  )
-                ],
-              ),
+                ),
+              ],
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        width: 2,
-                        color: statusColor,
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
                       ),
                     ),
-                  ),
-                  child: Text(
-                    '归还情况：$statusLabel',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      // fontSize: 18,
+                    child: Text(
+                      '类别：${item['toolTypeName']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
-                Container(
-                  padding: const EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      left: BorderSide(
-                        width: 2,
-                        color: statusColor,
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      '标签：${item['toolTagName']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
                       ),
                     ),
                   ),
-                  child: Text(
-                    '当前仓位：${item['currentPosition']}',
-                    style: TextStyle(
-                      color: statusColor,
-                      // fontSize: 18,
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      '型号：${item['model']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          width: 2,
+                          color: statusColor,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      '仓位：${item['expectPosition']}',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
@@ -412,7 +401,7 @@ class _ToolReturned extends State<ToolReturned>
                       //一行的Widget数量
                       crossAxisCount: 2,
                       //子Widget宽高比例
-                      childAspectRatio: 1.5,
+                      childAspectRatio: 1.6,
                       shrinkWrap: true,
                       //子Widget列表
                       children: renderCardInfo(),

@@ -4,3 +4,8 @@
 String appId = '68665522';
 
 String appSecret = 'uLTOtP9J';
+
+// 缓存里的值的键名
+class CacheKey {
+  static const String HOST = 'app_domain';
+}

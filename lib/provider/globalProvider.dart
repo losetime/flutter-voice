@@ -9,3 +9,12 @@ class HomeProvider with ChangeNotifier {
     notifyListeners(); //广播通知
   }
 }
+
+class DomainProvider with ChangeNotifier {
+  String domainHost = '';
+
+  setDomainHost(String val) {
+    domainHost = val;
+    notifyListeners(); //广播通知
+  }
+}

@@ -12,7 +12,7 @@ List<String> freightSpaceRowKey = [
   'toolExpectSum',
   'toolInSum',
   'toolLeaveSum',
-  'toolLeaveSum',
+  'status',
   'toolIncorrectSum',
 ];
 
@@ -28,7 +28,7 @@ List<String> toolHeader = [
 
 List<String> toolRowKey = [
   'name',
-  'bidNo',
+  'codeNumber',
   'toolTypeName',
   'toolTagName',
   'id',

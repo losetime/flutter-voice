@@ -39,6 +39,8 @@ dependencies:
   dio: ^4.0.6                     # http请求
   flutter_tts: ^3.4.0             # 语音合成
   date_format: ^2.0.6             # 时间格式化
+  fluttertoast: ^8.0.9            # toast提示
+  shared_preferences: ^2.0.15     # 缓存管理
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +71,8 @@ flutter:
     - assets/images/tab-bg.png
     - assets/images/avatar.png
     - assets/images/daiguihuan.png
+    - assets/images/guihuancuowu.png
+    - assets/images/guihuanwancheng.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -83,7 +87,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: iconfont
+    - family: AliIcon
       fonts:
         - asset: assets/font/iconfont.ttf
   #       - asset: fonts/Schyler-Italic.ttf
