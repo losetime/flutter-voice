@@ -4,7 +4,7 @@ List<String> freightSpaceHeader = <String>[
   '工器具在位数量',
   '工器具出库数量',
   '仓位状态',
-  '放置异常数量'
+  '放置状态'
 ];
 
 List<String> freightSpaceRowKey = [

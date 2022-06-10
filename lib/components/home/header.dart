@@ -30,13 +30,10 @@ class _HeaderWrap extends State<HeaderWrap>
     super.initState();
     getNowTime();
     _textFieldController = TextEditingController();
-    _textFieldController.addListener(() {
-      _textFieldController.value = _textFieldController.value.copyWith(
-          text: 'ws://192.168.35.159:32244/person/websocket/toolScreen');
-    });
+    _textFieldController.value = _textFieldController.value.copyWith(
+        text: 'ws://192.168.35.159:32244/person/websocket/toolScreen');
     Future.delayed(const Duration(milliseconds: 1000), () {
       if (AppCache.host!.isNotEmpty) {
-        print('AppCacheHost, ${AppCache.host}');
         provider.setDomainHost(AppCache.host as String);
       }
     });
@@ -52,7 +49,7 @@ class _HeaderWrap extends State<HeaderWrap>
    * @desc 初始化Provider 
    */
   void initProvider(context) {
-    provider = Provider.of<DomainProvider>(context);
+    provider = Provider.of<DomainProvider>(context, listen: false);
   }
 
   /*
@@ -76,7 +73,7 @@ class _HeaderWrap extends State<HeaderWrap>
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('请输入连接地址'),
+          title: const Text('连接地址'),
           content: TextField(
             controller: _textFieldController,
             autofocus: true, // 输入完成回调
@@ -145,20 +142,24 @@ class _HeaderWrap extends State<HeaderWrap>
             flex: 1,
             child: RealTimeWeather(),
           ),
-          // const Expanded(
-          //   flex: 1,
-          //   child:
-          // ),
-          // const RealTimeWeather(),
-          IconButton(
-            padding: EdgeInsets.zero,
-            icon: const Icon(
-              IconData(0xe615, fontFamily: 'AliIcon', matchTextDirection: true),
-              size: 16,
-              color: Color.fromRGBO(33, 150, 243, 1),
+          Container(
+            width: 20,
+            height: 20,
+            margin: const EdgeInsets.only(
+              right: 10,
+              top: 20,
             ),
-            onPressed: setDomain,
-          )
+            child: FloatingActionButton(
+              focusColor: const Color.fromRGBO(18, 155, 255, 1),
+              backgroundColor: const Color.fromRGBO(4, 4, 4, 1),
+              onPressed: setDomain,
+              tooltip: 'Increment',
+              child: const Icon(
+                Icons.settings,
+                size: 12,
+              ),
+            ),
+          ),
         ],
       ),
     );

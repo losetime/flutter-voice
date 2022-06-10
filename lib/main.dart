@@ -26,16 +26,19 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // 设置沉浸式状态栏
-    if (Platform.isAndroid) {
-      SystemUiOverlayStyle systemUiOverlayStyle =
-          const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    }
+    // // 设置沉浸式状态栏
+    // if (Platform.isAndroid) {
+    //   SystemUiOverlayStyle systemUiOverlayStyle =
+    //       const SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    // }
 
-    return Container(
+    return Shortcuts(
+      shortcuts: <LogicalKeySet, Intent>{
+        LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
+      },
       child: MaterialApp(
-        title: 'PCD Cloud',
+        title: '智慧仓储大屏',
         debugShowCheckedModeBanner: false, //是否显示app右上角的debug标志
         theme: ThemeData(primaryColor: const Color.fromRGBO(41, 175, 124, 1)),
         home: const IndexPage(),

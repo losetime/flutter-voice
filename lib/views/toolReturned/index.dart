@@ -17,7 +17,7 @@ class _ToolReturned extends State<ToolReturned>
 
   Map toolStats = {};
 
-  List sourceData = [{}];
+  List sourceData = [];
 
   @override
   void initState() {
@@ -51,10 +51,10 @@ class _ToolReturned extends State<ToolReturned>
     var userName =
         personInfo.containsKey('userName') ? personInfo['userName'] : '';
     var personInfoWrap = Container(
-      width: 300,
-      height: 354,
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.only(bottom: 20),
+      width: 250,
+      height: 290,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.only(bottom: 10),
       decoration: BoxDecoration(
         color: const Color.fromRGBO(11, 40, 66, 1),
         borderRadius: BorderRadius.circular(10.0), //3像素圆角
@@ -90,7 +90,7 @@ class _ToolReturned extends State<ToolReturned>
             ],
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.only(top: 20, bottom: 10),
             child: Text(
               '姓名：$userName',
               style: const TextStyle(
@@ -102,13 +102,13 @@ class _ToolReturned extends State<ToolReturned>
           photoUrl == ''
               ? Image.asset(
                   'assets/images/avatar.png',
-                  width: 158,
-                  height: 202,
+                  width: 150,
+                  height: 180,
                 )
               : Image.network(
                   photoUrl,
-                  width: 158,
-                  height: 202,
+                  width: 150,
+                  height: 180,
                 )
         ],
       ),
@@ -124,9 +124,9 @@ class _ToolReturned extends State<ToolReturned>
     String returnNum = toolStats.isNotEmpty ? toolStats['returnNum'] : '';
     String restNum = toolStats.isNotEmpty ? toolStats['restNum'] : '';
     Widget returnedWrap = Container(
-      width: 300,
-      height: 190,
-      padding: const EdgeInsets.all(20),
+      width: 250,
+      height: 150,
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: const Color.fromRGBO(11, 40, 66, 1),
         borderRadius: BorderRadius.circular(10.0), //3像素圆角
@@ -173,7 +173,7 @@ class _ToolReturned extends State<ToolReturned>
                 Row(
                   children: [
                     const Text(
-                      '领用总数',
+                      '领用总数 ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -191,7 +191,7 @@ class _ToolReturned extends State<ToolReturned>
                 Row(
                   children: [
                     const Text(
-                      '本次归还',
+                      '本次归还 ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -209,7 +209,7 @@ class _ToolReturned extends State<ToolReturned>
                 Row(
                   children: [
                     const Text(
-                      '剩余数量',
+                      '剩余数量 ',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 18,
@@ -390,36 +390,36 @@ class _ToolReturned extends State<ToolReturned>
         child: Column(
           children: [
             const HeaderWrap(),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 5),
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Column(
-                  children: [renderPersonInfo(), renderReturned()],
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: GridView.count(
-                      //水平子Widget之间间距
-                      crossAxisSpacing: 10.0,
-                      //垂直子Widget之间间距
-                      // mainAxisSpacing: 20.0,
-                      //GridView内边距
-                      // padding: EdgeInsets.all(10.0),
-                      //一行的Widget数量
-                      crossAxisCount: 2,
-                      //子Widget宽高比例
-                      childAspectRatio: 1.5,
-                      shrinkWrap: true,
-                      //子Widget列表
-                      children: renderCardInfo(),
-                    ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [renderPersonInfo(), renderReturned()],
                   ),
-                )
-              ],
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: GridView.count(
+                        //水平子Widget之间间距
+                        crossAxisSpacing: 10.0,
+                        //垂直子Widget之间间距
+                        // mainAxisSpacing: 20.0,
+                        //GridView内边距
+                        // padding: EdgeInsets.all(10.0),
+                        //一行的Widget数量
+                        crossAxisCount: 2,
+                        //子Widget宽高比例
+                        childAspectRatio: 1.5,
+                        shrinkWrap: true,
+                        //子Widget列表
+                        children: renderCardInfo(),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ],
         ),

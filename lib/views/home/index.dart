@@ -449,15 +449,86 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    **/
   List<Widget> renderField(List<String> keyList, Map sourceMap) {
     return keyList.map((item) {
-      return Expanded(
-        child: Text(
-          sourceMap[item],
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      );
+      switch (item) {
+        case 'status':
+          return Expanded(
+            child: Text(
+              sourceMap[item] == '0' ? '异常' : '正常',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
+        case 'toolIncorrectSum':
+          Color statusColor = sourceMap[item] == '0'
+              ? const Color.fromRGBO(83, 211, 77, 1)
+              : const Color.fromRGBO(255, 153, 0, 1);
+          return Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
+                  margin: const EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: statusColor),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.bookmark, color: statusColor, size: 12),
+                      Text(
+                        sourceMap[item] == '0' ? '正常' : '放置错误',
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  sourceMap[item] == '0' ? '' : sourceMap[item],
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          );
+        // 当前仓位
+        case 'currentPosition':
+          return Expanded(
+            child: Text(
+              sourceMap[item],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Color.fromRGBO(255, 153, 0, 1),
+              ),
+            ),
+          );
+        // 正确仓位
+        case 'expectPosition':
+          return Expanded(
+            child: Text(
+              sourceMap[item],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Color.fromRGBO(255, 153, 0, 1),
+              ),
+            ),
+          );
+        default:
+          return Expanded(
+            child: Text(
+              sourceMap[item],
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          );
+      }
     }).toList();
   }
 

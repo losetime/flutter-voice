@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart'; //卡片式主题
 import 'package:flutter/cupertino.dart'; //ios式风格
-import 'package:web_socket_channel/io.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:provider/provider.dart';
 import '../../provider/globalProvider.dart';
@@ -9,8 +8,8 @@ import 'home/index.dart';
 import 'toolReturned/index.dart';
 import 'toolReceive/index.dart';
 import 'dart:developer' as developer;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:async';
+import '../utils/web_socket_channel.dart';
 
 // 动态组件
 class IndexPage extends StatefulWidget {
@@ -38,51 +37,42 @@ class _IndexPageState extends State<IndexPage> {
 
   late FlutterTts flutterTts;
 
-  late IOWebSocketChannel channel;
+  late WebSocketChannel webSocketChannel;
 
   List<Map> voiceList = [];
 
   int currentIndex = 0;
   // var currentPage;
 
+  bool isSocketInit = false;
+
   @override
   void initState() {
     // currentPage = tabBodies[currentIndex];
     super.initState();
-    // initWebSocket();
     initTts();
+    Future.microtask(() => initProvider());
   }
 
   @override
   void dispose() {
-    channel.sink.close(); //关闭连接通道
+    webSocketChannel.dispose();
     super.dispose();
   }
 
   /*
-   * @desc 初始化Provider 
+   * @desc 初始化Provider
    */
-  void initProvider(context) {
-    provider = Provider.of<HomeProvider>(context);
-    domainProvider = Provider.of<DomainProvider>(context);
+  void initProvider() {
+    provider = Provider.of<HomeProvider>(context, listen: false);
+    domainProvider = Provider.of<DomainProvider>(context, listen: false);
     domainProvider.addListener(() {
       print(domainProvider.domainHost);
-      initWebSocket();
+      if (!isSocketInit) {
+        isSocketInit = true;
+        initWebSocket();
+      }
     });
-  }
-
-  /*
-   * @desc 创建websocket连接
-   **/
-  void initWebSocket() async {
-    if (domainProvider.domainHost.isNotEmpty) {
-      channel =
-          IOWebSocketChannel.connect(Uri.parse(domainProvider.domainHost));
-      channel.stream.listen(onWebsocketSuccess,
-          onDone: onWebsocketDone, onError: onWebsocketError);
-    } else {
-      Fluttertoast.showToast(msg: '域名地址不能为空');
-    }
   }
 
   /*
@@ -107,9 +97,20 @@ class _IndexPageState extends State<IndexPage> {
     });
   }
 
+  /*
+   * @desc 创建websocket连接
+   **/
+  void initWebSocket() {
+    webSocketChannel = WebSocketChannel.socketIntance;
+    webSocketChannel.initWebSocket(
+        domainProvider.domainHost, onWebsocketSuccess);
+    Future.delayed(const Duration(milliseconds: 1000), () {
+      isSocketInit = false;
+    });
+  }
+
   void onWebsocketSuccess(message) {
     Map result = jsonDecode(message);
-    // print(result);
     developer.log('输出日志', name: 'websocket响应', error: message);
     switch (result['type']) {
       // 更新列表
@@ -149,21 +150,8 @@ class _IndexPageState extends State<IndexPage> {
     }
   }
 
-  void onWebsocketError(error) {
-    print('失败, 关闭');
-    channel.sink.close(); //关闭连接通道
-  }
-
-  void onWebsocketDone() {
-    print('重连');
-    Future.delayed(const Duration(seconds: 10), () {
-      initWebSocket();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    initProvider(context);
     return Scaffold(
       // backgroundColor: Color.fromRGBO(244, 245, 245, 1.0),
       // bottomNavigationBar: BottomNavigationBar(
