@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart'; //卡片式主题
-import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import './provider/globalProvider.dart';

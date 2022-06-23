@@ -10,6 +10,7 @@ import 'toolReceive/index.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import '../utils/web_socket_channel.dart';
+import 'package:ftoast/ftoast.dart';
 
 // 动态组件
 class IndexPage extends StatefulWidget {
@@ -21,7 +22,6 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   late HomeProvider provider;
-  late DomainProvider domainProvider;
   final List<BottomNavigationBarItem> bottomTabs = [
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.car_detailed), label: '主页'),
@@ -52,6 +52,10 @@ class _IndexPageState extends State<IndexPage> {
     super.initState();
     initTts();
     Future.microtask(() => initProvider());
+    if (!isSocketInit) {
+      isSocketInit = true;
+      initWebSocket();
+    }
   }
 
   @override
@@ -65,14 +69,6 @@ class _IndexPageState extends State<IndexPage> {
    */
   void initProvider() {
     provider = Provider.of<HomeProvider>(context, listen: false);
-    domainProvider = Provider.of<DomainProvider>(context, listen: false);
-    domainProvider.addListener(() {
-      print(domainProvider.domainHost);
-      if (!isSocketInit) {
-        isSocketInit = true;
-        initWebSocket();
-      }
-    });
   }
 
   /*
@@ -102,14 +98,14 @@ class _IndexPageState extends State<IndexPage> {
    **/
   void initWebSocket() {
     webSocketChannel = WebSocketChannel.socketIntance;
-    webSocketChannel.initWebSocket(
-        domainProvider.domainHost, onWebsocketSuccess);
+    webSocketChannel.initWebSocket(onWebsocketSuccess, context);
     Future.delayed(const Duration(milliseconds: 1000), () {
       isSocketInit = false;
     });
   }
 
   void onWebsocketSuccess(message) {
+    FToast.toast(context, msg: '连接成功');
     Map result = jsonDecode(message);
     developer.log('输出日志', name: 'websocket响应', error: message);
     switch (result['type']) {

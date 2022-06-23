@@ -39,8 +39,9 @@ dependencies:
   dio: ^4.0.6                     # http请求
   flutter_tts: ^3.4.0             # 语音合成
   date_format: ^2.0.6             # 时间格式化
-  fluttertoast: ^8.0.9            # toast提示
   shared_preferences: ^2.0.15     # 缓存管理
+  platform_device_id: ^1.0.1
+  ftoast: ^2.0.0
 
 dev_dependencies:
   flutter_test:
