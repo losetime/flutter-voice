@@ -128,32 +128,43 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Expanded(
-          flex: 2,
+          flex: 1,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        left: BorderSide(
-                  color: Color.fromRGBO(18, 155, 255, 1),
-                  width: 2,
-                ))),
-                child: const Text(
-                  '工器具信息',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+              const Text(
+                '工器具信息',
+                style: TextStyle(
+                  color: Color.fromRGBO(40, 219, 254, 1),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
+                  horizontal: 10.0,
+                  vertical: 10.0,
+                ),
+                margin: const EdgeInsets.only(
+                  top: 5.0,
+                ),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(0, 92, 173, 1),
+                      Color.fromRGBO(0, 57, 138, 1),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: const Color.fromRGBO(7, 187, 237, 1),
+                    width: 1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Row(
+                      child: Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 10),
@@ -161,21 +172,23 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                               '工器具类型',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Text(
                             overviewData['toolTypeNum'],
                             style: const TextStyle(
-                              color: Color.fromRGBO(18, 155, 255, 1),
-                              fontSize: 36,
+                              color: Color.fromRGBO(61, 255, 247, 1),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
-                      child: Row(
+                      child: Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 10),
@@ -183,21 +196,23 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                               '工器具总数量',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Text(
                             overviewData['toolNum'],
                             style: const TextStyle(
-                              color: Color.fromRGBO(18, 155, 255, 1),
-                              fontSize: 36,
+                              color: Color.fromRGBO(251, 213, 68, 1),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
-                      child: Row(
+                      child: Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 10),
@@ -205,14 +220,16 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                               '总仓位',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Text(
                             overviewData['storeNum'],
                             style: const TextStyle(
-                              color: Color.fromRGBO(18, 155, 255, 1),
-                              fontSize: 36,
+                              color: Color.fromRGBO(68, 244, 126, 1),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -224,33 +241,48 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
             ],
           ),
         ),
+        const SizedBox(
+          width: 100,
+          height: 50,
+        ),
         Expanded(
           flex: 1,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                decoration: const BoxDecoration(
-                    border: Border(
-                        left: BorderSide(
-                  color: Color.fromRGBO(18, 155, 255, 1),
-                  width: 2,
-                ))),
-                child: const Text(
-                  '今日领还',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+              const Text(
+                '今日领还',
+                style: TextStyle(
+                  color: Color.fromRGBO(40, 219, 254, 1),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 10.0, vertical: 10.0),
+                  horizontal: 10.0,
+                  vertical: 10.0,
+                ),
+                margin: const EdgeInsets.only(
+                  top: 5.0,
+                ),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color.fromRGBO(0, 92, 173, 1),
+                      Color.fromRGBO(0, 57, 138, 1),
+                    ],
+                  ),
+                  border: Border.all(
+                    color: const Color.fromRGBO(7, 187, 237, 1),
+                    width: 1,
+                    style: BorderStyle.solid,
+                  ),
+                ),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Row(
+                      child: Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 10),
@@ -258,21 +290,23 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                               '领取数量',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Text(
                             overviewData['receiveNum'],
                             style: const TextStyle(
-                              color: Color.fromRGBO(18, 155, 255, 1),
-                              fontSize: 36,
+                              color: Color.fromRGBO(40, 213, 253, 1),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
                     ),
                     Expanded(
-                      child: Row(
+                      child: Column(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(right: 10),
@@ -280,14 +314,16 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                               '归还数量',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
                           Text(
                             overviewData['returnNum'],
                             style: const TextStyle(
-                              color: Color.fromRGBO(18, 155, 255, 1),
-                              fontSize: 36,
+                              color: Color.fromRGBO(68, 244, 126, 1),
+                              fontSize: 32,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
@@ -377,33 +413,47 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
         ),
         // 表头
         Container(
-          height: 40,
+          // height: 40,
+          padding: const EdgeInsets.all(1.0),
           decoration: const BoxDecoration(
-            color: Color.fromRGBO(14, 43, 69, 1),
             border: Border(
               left: BorderSide(
-                color: Color.fromRGBO(18, 155, 255, 1),
+                color: Color.fromRGBO(28, 113, 220, 1),
               ),
               right: BorderSide(
-                color: Color.fromRGBO(18, 155, 255, 1),
+                color: Color.fromRGBO(28, 113, 220, 1),
               ),
               top: BorderSide(
-                color: Color.fromRGBO(18, 155, 255, 1),
+                color: Color.fromRGBO(28, 113, 220, 1),
               ),
             ),
           ),
-          child: Row(
-            children: listHeader,
+          child: Container(
+            height: 36,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(0, 129, 241, 1),
+            ),
+            child: Row(
+              children: listHeader,
+            ),
           ),
         ),
         Container(
             height: listViewHeight,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: const Color.fromRGBO(18, 155, 255, 1),
+            decoration: const BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Color.fromRGBO(28, 113, 220, 1),
+                ),
+                right: BorderSide(
+                  color: Color.fromRGBO(28, 113, 220, 1),
+                ),
+                bottom: BorderSide(
+                  color: Color.fromRGBO(28, 113, 220, 1),
+                ),
               ),
             ),
-            child: renderTable(header, rowKey, sourceData)),
+            child: renderTableBody(header, rowKey, sourceData)),
       ],
     );
 
@@ -413,20 +463,19 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   /*
    * @desc 渲染仓位Table 
    **/
-  Widget renderTable(
+  Widget renderTableBody(
       List<String> tableHeader, List<String> rowKey, List sourceData) {
     // 列表行
     List<Widget> listViewWrap = sourceData.map((item) {
       return Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              color: Color.fromRGBO(18, 155, 255, 1),
-            ),
+        padding: const EdgeInsets.all(2.0),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Color.fromRGBO(0, 61, 143, 1),
           ),
-        ),
-        child: Row(
-          children: renderField(rowKey, item),
+          child: Row(
+            children: renderField(rowKey, item),
+          ),
         ),
         // children: ,
       );
@@ -461,38 +510,36 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
             ),
           );
         case 'toolIncorrectSum':
-          Color statusColor = sourceMap[item] == '0'
-              ? const Color.fromRGBO(83, 211, 77, 1)
-              : const Color.fromRGBO(255, 153, 0, 1);
           return Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 5),
-                  margin: const EdgeInsets.only(right: 5),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: statusColor),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.bookmark, color: statusColor, size: 12),
-                      Text(
-                        sourceMap[item] == '0' ? '正常' : '放置错误',
-                        style: const TextStyle(
-                          color: Colors.white,
+                sourceMap[item] == '0'
+                    ? const Text(
+                        '正常',
+                        style: TextStyle(
+                          color: Color.fromRGBO(68, 244, 126, 1),
                         ),
+                      )
+                    : Row(
+                        children: [
+                          const Icon(Icons.warning_amber_rounded,
+                              color: Color.fromRGBO(255, 148, 0, 1), size: 12),
+                          const Text(
+                            '放置错误',
+                            style: TextStyle(
+                              color: Color.fromRGBO(255, 148, 0, 1),
+                            ),
+                          ),
+                          Text(
+                            '(${sourceMap[item]})',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                Text(
-                  sourceMap[item] == '0' ? '' : sourceMap[item],
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
               ],
             ),
           );
@@ -540,19 +587,14 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
         minHeight: MediaQuery.of(context).size.height,
       ),
       decoration: const BoxDecoration(
-        color: Color(0xFF040404),
-        image: DecorationImage(
-          fit: BoxFit.contain,
-          image: AssetImage('assets/images/footer.png'),
-          alignment: Alignment.bottomCenter,
-        ),
+        color: Color.fromRGBO(0, 16, 76, 1),
       ),
       child: Column(
         children: [
           const HeaderWrap(),
           Padding(
             padding: const EdgeInsets.only(
-              top: 10,
+              // top: 10,
               bottom: 10,
               left: 50,
               right: 50,

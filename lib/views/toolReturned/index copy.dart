@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../provider/globalProvider.dart';
 import '../../components/home/header.dart';
-import '../../enums/homeEnum.dart'
-    show
-        toolReturnedHistoryHeader,
-        toolReturnedHistoryKey,
-        toolReturnedRealTimeHeader,
-        toolReturnedRealTimeKey,
-        testTableData;
-import '../../components/common/YmTable.dart';
 
 class ToolReturned extends StatefulWidget {
   const ToolReturned({Key? key}) : super(key: key);
@@ -25,11 +17,7 @@ class _ToolReturned extends State<ToolReturned>
 
   Map toolStats = {};
 
-  List tableData = [];
-
-  late double listViewHeight;
-
-  int historyIndicator = 0;
+  List sourceData = [];
 
   @override
   void initState() {
@@ -40,11 +28,10 @@ class _ToolReturned extends State<ToolReturned>
    * @desc 初始化Provider 
    */
   void initProvider(context) {
-    listViewHeight = MediaQuery.of(context).size.height - 162 - 35 - 40 - 30;
     provider = Provider.of<HomeProvider>(context);
     provider.addListener(() {
       setState(() {
-        tableData = provider.socketInfo['toolRetList'];
+        sourceData = provider.socketInfo['toolRetList'];
         personInfo = provider.socketInfo.containsKey('peopleInfo')
             ? provider.socketInfo['peopleInfo']
             : {};
@@ -250,7 +237,7 @@ class _ToolReturned extends State<ToolReturned>
    * @desc 渲染卡片信息
    */
   List<Widget> renderCardInfo() {
-    List<Widget> cardInfoList = tableData.map((item) {
+    List<Widget> cardInfoList = sourceData.map((item) {
       String imgPath = 'assets/images/daiguihuan.png';
       String statusLabel = '';
       Color statusColor = const Color.fromRGBO(18, 155, 255, 1);
@@ -389,229 +376,6 @@ class _ToolReturned extends State<ToolReturned>
     return cardInfoList;
   }
 
-  /*
-   * @desc 渲染表格信息
-   */
-  Widget renderTable(
-      List<String> header, List<String> rowKey, List sourceData) {
-    List<Widget> listHeader = header.map((item) {
-      return Expanded(
-        child: Text(
-          item,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-      );
-    }).toList();
-
-    var tableWrap = Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // 表头
-        Container(
-          // height: 40,
-          padding: const EdgeInsets.all(1.0),
-          decoration: const BoxDecoration(
-            border: Border(
-              left: BorderSide(
-                color: Color.fromRGBO(28, 113, 220, 1),
-              ),
-              right: BorderSide(
-                color: Color.fromRGBO(28, 113, 220, 1),
-              ),
-              top: BorderSide(
-                color: Color.fromRGBO(28, 113, 220, 1),
-              ),
-            ),
-          ),
-          child: Container(
-            height: 36,
-            decoration: const BoxDecoration(
-              color: Color.fromRGBO(0, 129, 241, 1),
-            ),
-            child: Row(
-              children: listHeader,
-            ),
-          ),
-        ),
-        Container(
-            height: listViewHeight,
-            decoration: const BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Color.fromRGBO(28, 113, 220, 1),
-                ),
-                right: BorderSide(
-                  color: Color.fromRGBO(28, 113, 220, 1),
-                ),
-                bottom: BorderSide(
-                  color: Color.fromRGBO(28, 113, 220, 1),
-                ),
-              ),
-            ),
-            child: renderTableBody(header, rowKey, sourceData)),
-      ],
-    );
-
-    return tableWrap;
-  }
-
-  /*
-   * @desc 渲染仓位Table 
-   **/
-  Widget renderTableBody(
-      List<String> tableHeader, List<String> rowKey, List sourceData) {
-    // 列表行
-    List<Widget> listViewWrap = sourceData.map((item) {
-      return Container(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(0, 61, 143, 1),
-          ),
-          child: Row(
-            children: renderField(rowKey, item),
-          ),
-        ),
-        // children: ,
-      );
-    }).toList();
-    // 生成表格
-    ListView tableWrap = ListView.builder(
-      itemCount: listViewWrap.length,
-      itemExtent: 40,
-      // controller: _scrollController,
-      itemBuilder: (BuildContext context, int index) {
-        return listViewWrap[index];
-      },
-    );
-
-    return tableWrap;
-  }
-
-  /*
-   * @desc 渲染表格字段
-   **/
-  List<Widget> renderField(List<String> keyList, Map sourceMap) {
-    return keyList.map((item) {
-      switch (item) {
-        case 'status':
-          return Expanded(
-            child: Text(
-              sourceMap[item] == '0' ? '异常' : '正常',
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          );
-        case 'toolIncorrectSum':
-          return Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                sourceMap[item] == '0'
-                    ? const Text(
-                        '正常',
-                        style: TextStyle(
-                          color: Color.fromRGBO(68, 244, 126, 1),
-                        ),
-                      )
-                    : Row(
-                        children: [
-                          const Icon(Icons.warning_amber_rounded,
-                              color: Color.fromRGBO(255, 148, 0, 1), size: 12),
-                          const Text(
-                            '放置错误',
-                            style: TextStyle(
-                              color: Color.fromRGBO(255, 148, 0, 1),
-                            ),
-                          ),
-                          Text(
-                            '(${sourceMap[item]})',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-              ],
-            ),
-          );
-        // 当前仓位
-        case 'currentPosition':
-          return Expanded(
-            child: Text(
-              sourceMap[item],
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color.fromRGBO(255, 153, 0, 1),
-              ),
-            ),
-          );
-        // 正确仓位
-        case 'expectPosition':
-          return Expanded(
-            child: Text(
-              sourceMap[item],
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Color.fromRGBO(255, 153, 0, 1),
-              ),
-            ),
-          );
-        default:
-          return Expanded(
-            child: Text(
-              sourceMap[item],
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-          );
-      }
-    }).toList();
-  }
-
-  Widget renderPagination(int indicator) {
-    int pageSize = 10;
-    List<Widget> paginationList = [];
-    for (int i = 0; i < pageSize; i++) {
-      Widget paginationItem = Container(
-        width: 25,
-        height: 25,
-        margin: const EdgeInsets.only(right: 5),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color.fromRGBO(0, 60, 141, 1),
-          ),
-          color: indicator == i ? const Color.fromRGBO(0, 61, 143, 1) : null,
-          borderRadius: const BorderRadius.all(Radius.circular(5)),
-        ),
-        child: Center(
-          child: Text(
-            (i + 1).toString(),
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-      paginationList.add(paginationItem);
-    }
-    return Container(
-      margin: const EdgeInsets.only(top: 10),
-      child: Row(
-        children: paginationList,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     initProvider(context);
@@ -621,62 +385,38 @@ class _ToolReturned extends State<ToolReturned>
           minHeight: MediaQuery.of(context).size.height,
         ),
         decoration: const BoxDecoration(
-          color: Color.fromRGBO(0, 16, 76, 1),
+          color: Color(0xFF040404),
         ),
         child: Column(
           children: [
             const HeaderWrap(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-              child: Column(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.symmetric(vertical: 15),
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color.fromRGBO(0, 92, 173, 1),
-                          Color.fromRGBO(0, 57, 138, 1),
-                        ],
-                      ),
-                      border: Border.all(
-                        color: const Color.fromRGBO(7, 187, 237, 1),
-                        width: 1,
-                        style: BorderStyle.solid,
-                      ),
-                    ),
-                    child: const Text(
-                      '张伟涛请归还设备',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  Column(
+                    children: [renderPersonInfo(), renderReturned()],
                   ),
-                  Row(
-                    children: [
-                      YmTable(
-                        header: toolReturnedHistoryHeader,
-                        rowKey: toolReturnedHistoryKey,
-                        sourceData: testTableData,
-                        tableHeight: listViewHeight,
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 20),
+                      child: GridView.count(
+                        //水平子Widget之间间距
+                        crossAxisSpacing: 10.0,
+                        //垂直子Widget之间间距
+                        // mainAxisSpacing: 20.0,
+                        //GridView内边距
+                        // padding: EdgeInsets.all(10.0),
+                        //一行的Widget数量
+                        crossAxisCount: 2,
+                        //子Widget宽高比例
+                        childAspectRatio: 1.5,
+                        shrinkWrap: true,
+                        //子Widget列表
+                        children: renderCardInfo(),
                       ),
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      YmTable(
-                        header: toolReturnedRealTimeHeader,
-                        rowKey: toolReturnedRealTimeKey,
-                        sourceData: testTableData,
-                        tableHeight: listViewHeight,
-                        indicatorPosition: 'right',
-                      ),
-                    ],
+                    ),
                   )
                 ],
               ),

@@ -41,7 +41,7 @@ class _IndexPageState extends State<IndexPage> {
 
   List<Map> voiceList = [];
 
-  int currentIndex = 0;
+  int currentIndex = 1;
   // var currentPage;
 
   bool isSocketInit = false;
@@ -54,7 +54,7 @@ class _IndexPageState extends State<IndexPage> {
     Future.microtask(() => initProvider());
     if (!isSocketInit) {
       isSocketInit = true;
-      initWebSocket();
+      // initWebSocket();
     }
   }
 

@@ -53,31 +53,26 @@ class _HeaderWrap extends State<HeaderWrap>
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            flex: 1,
+          Container(
+            margin: const EdgeInsets.only(
+              left: 20,
+              top: 8,
+            ),
             child: Text(
               nowTime,
-              textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
               ),
             ),
           ),
-          const Expanded(
-            flex: 1,
-            child: Text(
-              '智慧仓储大屏',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color.fromRGBO(18, 155, 255, 1),
-                fontSize: 30,
-              ),
+          Container(
+            margin: const EdgeInsets.only(
+              right: 20,
+              top: 8,
             ),
-          ),
-          const Expanded(
-            flex: 1,
-            child: RealTimeWeather(),
+            child: const RealTimeWeather(),
           ),
         ],
       ),
