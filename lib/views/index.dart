@@ -22,6 +22,7 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   late HomeProvider provider;
+  late BroadcastProvider broadcastProvider;
   final List<BottomNavigationBarItem> bottomTabs = [
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.car_detailed), label: '主页'),
@@ -39,9 +40,9 @@ class _IndexPageState extends State<IndexPage> {
 
   late WebSocketChannel webSocketChannel;
 
-  List<Map> voiceList = [];
+  List<String> voiceList = [];
 
-  int currentIndex = 1;
+  int currentIndex = 0;
   // var currentPage;
 
   bool isSocketInit = false;
@@ -54,7 +55,7 @@ class _IndexPageState extends State<IndexPage> {
     Future.microtask(() => initProvider());
     if (!isSocketInit) {
       isSocketInit = true;
-      // initWebSocket();
+      initWebSocket();
     }
   }
 
@@ -69,6 +70,7 @@ class _IndexPageState extends State<IndexPage> {
    */
   void initProvider() {
     provider = Provider.of<HomeProvider>(context, listen: false);
+    broadcastProvider = Provider.of<BroadcastProvider>(context, listen: false);
   }
 
   /*
@@ -84,7 +86,7 @@ class _IndexPageState extends State<IndexPage> {
    * @desc 语音播报队列
    **/
   void voiceBroadcast() {
-    flutterTts.speak(voiceList[0]['content']);
+    flutterTts.speak(voiceList[0]);
     flutterTts.setCompletionHandler(() {
       voiceList.removeAt(0);
       if (voiceList.isNotEmpty) {
@@ -134,13 +136,17 @@ class _IndexPageState extends State<IndexPage> {
         break;
       // 语音播报
       case 'toolLog':
+        broadcastProvider.setBroadcastInfo(result);
+        String voiceText =
+            result['content'].map((item) => item['metadata']).join();
+        // print('声音： $voiceText');
         if (voiceList.isEmpty) {
           // 语音播报列表如果为空，插入数据，并启动播报
-          voiceList.add(result);
+          voiceList.add(voiceText);
           voiceBroadcast();
         } else {
           // 直接插入
-          voiceList.add(result);
+          voiceList.add(voiceText);
         }
         break;
     }

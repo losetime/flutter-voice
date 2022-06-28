@@ -74,6 +74,7 @@ flutter:
     - assets/images/daiguihuan.png
     - assets/images/guihuancuowu.png
     - assets/images/guihuanwancheng.png
+    - assets/images/receiving-bg.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

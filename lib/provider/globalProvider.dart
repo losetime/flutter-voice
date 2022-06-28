@@ -10,11 +10,11 @@ class HomeProvider with ChangeNotifier {
   }
 }
 
-class DomainProvider with ChangeNotifier {
-  String domainHost = '';
+class BroadcastProvider with ChangeNotifier {
+  Map broadcastInfo = {};
 
-  setDomainHost(String val) {
-    domainHost = val;
+  setBroadcastInfo(Map val) {
+    broadcastInfo = val;
     notifyListeners(); //广播通知
   }
 }

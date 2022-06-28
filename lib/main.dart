@@ -15,7 +15,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => HomeProvider()),
-        ChangeNotifierProvider(create: (_) => DomainProvider()),
+        ChangeNotifierProvider(create: (_) => BroadcastProvider()),
       ],
       child: MyApp(),
     ),

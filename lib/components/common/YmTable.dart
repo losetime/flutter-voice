@@ -4,7 +4,7 @@ import 'dart:async';
 class YmTable extends StatefulWidget {
   final List<String> header;
   final List<String> rowKey;
-  final List sourceData;
+  final List<List> sourceData;
   final double tableHeight;
   final String indicatorPosition;
   const YmTable({
@@ -32,7 +32,6 @@ class _YmTable extends State<YmTable> {
 
   @override
   void initState() {
-    formattTableData();
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       offset = _scrollController.offset;
@@ -45,20 +44,24 @@ class _YmTable extends State<YmTable> {
    * @desc 分割表格数据
    */
   void formattTableData() {
-    int len = 7;
+    List<List> twoDimList = [];
+    int len = widget.tableHeight ~/ 40;
     int index = 1;
     while (true) {
       if (index * len < widget.sourceData.length) {
         List temp =
             widget.sourceData.skip((index - 1) * len).take(len).toList();
-        twoDimTableData.add(temp);
+        twoDimList.add(temp);
         index++;
         continue;
       }
       List temp = widget.sourceData.skip((index - 1) * len).toList();
-      twoDimTableData.add(temp);
+      twoDimList.add(temp);
       break;
     }
+    setState(() {
+      twoDimTableData = twoDimList;
+    });
   }
 
   /*
@@ -134,21 +137,24 @@ class _YmTable extends State<YmTable> {
    * @desc 渲染仓位Table 
    **/
   Widget renderTableBody() {
+    List<Widget> listViewWrap = [];
     // 列表行
-    List<Widget> listViewWrap = twoDimTableData[indicator].map((item) {
-      return Container(
-        padding: const EdgeInsets.all(2.0),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Color.fromRGBO(0, 61, 143, 1),
+    if (widget.sourceData.isNotEmpty) {
+      listViewWrap = widget.sourceData[indicator].map((item) {
+        return Container(
+          padding: const EdgeInsets.all(2.0),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(0, 61, 143, 1),
+            ),
+            child: Row(
+              children: renderField(item),
+            ),
           ),
-          child: Row(
-            children: renderField(item),
-          ),
-        ),
-        // children: ,
-      );
-    }).toList();
+          // children: ,
+        );
+      }).toList();
+    }
     // 生成表格
     ListView tableWrap = ListView.builder(
       itemCount: listViewWrap.length,
@@ -158,7 +164,6 @@ class _YmTable extends State<YmTable> {
         return listViewWrap[index];
       },
     );
-
     return tableWrap;
   }
 
@@ -253,7 +258,7 @@ class _YmTable extends State<YmTable> {
    */
   Widget renderPagination() {
     List<Widget> paginationList = [];
-    for (int i = 0; i < twoDimTableData.length; i++) {
+    for (int i = 0; i < widget.sourceData.length; i++) {
       Widget paginationItem = Container(
         width: 25,
         height: 25,
@@ -306,7 +311,8 @@ class _YmTable extends State<YmTable> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return SizedBox(
+      width: double.maxFinite,
       child: Column(
         children: [
           renderTable(),
