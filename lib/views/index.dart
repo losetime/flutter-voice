@@ -10,7 +10,6 @@ import 'toolReceive/index.dart';
 import 'dart:developer' as developer;
 import 'dart:async';
 import '../utils/web_socket_channel.dart';
-import 'package:ftoast/ftoast.dart';
 
 // 动态组件
 class IndexPage extends StatefulWidget {
@@ -107,7 +106,6 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   void onWebsocketSuccess(message) {
-    FToast.toast(context, msg: '连接成功');
     Map result = jsonDecode(message);
     developer.log('输出日志', name: 'websocket响应', error: message);
     switch (result['type']) {
@@ -139,7 +137,6 @@ class _IndexPageState extends State<IndexPage> {
         broadcastProvider.setBroadcastInfo(result);
         String voiceText =
             result['content'].map((item) => item['metadata']).join();
-        // print('声音： $voiceText');
         if (voiceList.isEmpty) {
           // 语音播报列表如果为空，插入数据，并启动播报
           voiceList.add(voiceText);

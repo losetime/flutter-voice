@@ -4,6 +4,7 @@ import 'package:web_socket_channel/status.dart' as status;
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:dio/dio.dart';
 import 'package:ftoast/ftoast.dart';
+import 'package:date_format/date_format.dart';
 
 class WebSocketChannel {
   static final WebSocketChannel _instance = WebSocketChannel._internal();
@@ -16,6 +17,8 @@ class WebSocketChannel {
 
   late String deviceId;
 
+  bool isFirstConnect = true;
+
   /*
    * @desc 创建websocket连接
    **/
@@ -23,14 +26,23 @@ class WebSocketChannel {
     String socketUrl = await _getSocketUrl(context);
     if (socketUrl.isNotEmpty) {
       channel = IOWebSocketChannel.connect(Uri.parse(socketUrl));
-      channel.stream.listen(onData,
+      channel.stream.listen(
+          (message) => onWebsocketSuccess(message, onData, context),
           onDone: () => onWebsocketDone(onData, context),
           onError: (error) => onWebsocketError(socketUrl, context));
     } else {
+      DateTime currentDate = DateTime.now();
+      String nowTime = '${formatDate(currentDate, [
+            yyyy,
+            '-',
+            mm,
+            '-',
+            dd
+          ])} ${formatDate(currentDate, [HH, ':', nn, ':', ss])}';
       FToast.toast(
         context,
         msg: '提示',
-        subMsg: '域名地址不能为空, 设备id：$deviceId',
+        subMsg: '$nowTime: 域名地址不能为空, 设备id：$deviceId',
         image: const Icon(
           Icons.warning_amber_rounded,
           color: Colors.yellow,
@@ -39,19 +51,31 @@ class WebSocketChannel {
         duration: 60000,
         color: Colors.black,
       );
+      Future.delayed(const Duration(seconds: 10), () {
+        initWebSocket(onData, context);
+      });
     }
+  }
+
+  void onWebsocketSuccess(message, callback, context) {
+    if (isFirstConnect) {
+      FToast.toast(context, msg: '连接成功');
+      isFirstConnect = false;
+    }
+    callback(message);
   }
 
   void onWebsocketError(socketUrl, context) {
     channel.sink.close(status.goingAway); //关闭连接通道
-    debugPrint('[状态]: websocket连接失败,已关闭');
     FToast.toast(context, msg: 'websocket连接失败, 连接地址：$socketUrl');
   }
 
   void onWebsocketDone(onData, context) {
+    FToast.toast(context, msg: '[状态]: 连接终止');
     Future.delayed(const Duration(seconds: 10), () {
       initWebSocket(onData, context);
-      debugPrint('[状态]: 开始重连');
+      FToast.toast(context, msg: '[状态]: 开始重连');
+      isFirstConnect = true;
     });
   }
 

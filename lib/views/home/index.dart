@@ -35,9 +35,15 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
 
   int tabIndex = 0;
 
-  late Timer switchTimer;
+  late Timer switchTabsTimer;
+
+  late Timer switchTableTimer;
 
   late double listViewHeight;
+
+  int indicatorOne = 0;
+
+  int indicatorTwo = 0;
 
   @override
   void initState() {
@@ -54,12 +60,14 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
       }
     });
     setTimingSwitchTab();
+    changeIndicator();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
-    switchTimer.cancel();
+    switchTabsTimer.cancel();
+    switchTableTimer.cancel();
     super.dispose();
   }
 
@@ -80,11 +88,43 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   }
 
   /*
+   * @desc 修改指示器
+   */
+  void changeIndicator() {
+    switchTableTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      switch (tabIndex) {
+        case 0:
+          if (indicatorOne + 1 >= storeLogList.length) {
+            setState(() {
+              indicatorOne = 0;
+            });
+          } else {
+            setState(() {
+              indicatorOne += 1;
+            });
+          }
+          break;
+        case 1:
+          if (indicatorTwo + 1 >= toolLogList.length) {
+            setState(() {
+              indicatorTwo = 0;
+            });
+          } else {
+            setState(() {
+              indicatorTwo += 1;
+            });
+          }
+          break;
+      }
+    });
+  }
+
+  /*
    * @desc 设置定时切换Tab
    **/
   void setTimingSwitchTab() {
-    switchTimer = Timer.periodic(const Duration(seconds: 20), (timer) {
-      if (tabIndex == 0) {
+    switchTabsTimer = Timer.periodic(const Duration(seconds: 20), (timer) {
+      if (tabIndex == 0 && toolLogList[0].isNotEmpty) {
         setState(() {
           tabIndex = 1;
           _tabController.index = 1;
@@ -407,12 +447,14 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     rowKey: freightSpaceRowKey,
                     sourceData: storeLogList,
                     tableHeight: listViewHeight,
+                    indicator: indicatorOne,
                   )
                 : YmTable(
                     header: toolHeader,
                     rowKey: toolRowKey,
                     sourceData: toolLogList,
                     tableHeight: listViewHeight,
+                    indicator: indicatorTwo,
                   ),
           ),
         ],

@@ -31,10 +31,26 @@ class _HeaderWrap extends State<HeaderWrap>
    * @desc 设置当前时间
    */
   void getNowTime() {
+    const weekday = [" ", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六", "星期日"];
     dateTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      DateTime currentDate = DateTime.now();
       setState(() {
-        nowTime = formatDate(DateTime.now(),
-            [yyyy, '-', mm, '-', dd, ' ', HH, ':', nn, ':', ss]);
+        nowTime = '${formatDate(currentDate, [
+              yyyy,
+              '-',
+              mm,
+              '-',
+              dd
+            ])}  ${weekday[currentDate.weekday]}  ${formatDate(currentDate, [
+              HH,
+              ':',
+              nn,
+              ':',
+              ss
+            ])}';
+        // +
+        //     weekday[currentDate.weekday] +
+        //     formatDate(currentDate, [HH, ':', nn, ':', ss]);
       });
     });
   }

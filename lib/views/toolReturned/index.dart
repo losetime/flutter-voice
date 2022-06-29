@@ -10,6 +10,7 @@ import '../../enums/homeEnum.dart'
         toolReturnedRealTimeKey;
 import '../../components/common/YmTable.dart';
 import '../../utils/base.dart';
+import 'dart:async';
 
 class ToolReturned extends StatefulWidget {
   const ToolReturned({Key? key}) : super(key: key);
@@ -33,11 +34,24 @@ class _ToolReturned extends State<ToolReturned>
 
   List<Widget> broadcastPanel = [];
 
+  int indicatorOne = 0;
+
+  int indicatorTwo = 0;
+
+  late Timer switchTableTimer;
+
   @override
   void initState() {
     baseUtils = BaseUtils();
     Future.microtask(() => initProvider());
+    changeIndicator();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    switchTableTimer.cancel();
+    super.dispose();
   }
 
   /*
@@ -58,6 +72,32 @@ class _ToolReturned extends State<ToolReturned>
       setState(() {
         broadcastPanel = renderBroadcastWrap();
       });
+    });
+  }
+
+  /*
+   * @desc 修改指示器
+   */
+  void changeIndicator() {
+    switchTableTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (indicatorOne + 1 >= toolYGHList.length) {
+        setState(() {
+          indicatorOne = 0;
+        });
+      } else {
+        setState(() {
+          indicatorOne += 1;
+        });
+      }
+      if (indicatorTwo + 1 >= toolZKYCList.length) {
+        setState(() {
+          indicatorTwo = 0;
+        });
+      } else {
+        setState(() {
+          indicatorTwo += 1;
+        });
+      }
     });
   }
 
@@ -134,6 +174,7 @@ class _ToolReturned extends State<ToolReturned>
                           rowKey: toolReturnedHistoryKey,
                           sourceData: toolYGHList,
                           tableHeight: listViewHeight,
+                          indicator: indicatorOne,
                         ),
                       ),
                       const SizedBox(
@@ -146,6 +187,7 @@ class _ToolReturned extends State<ToolReturned>
                           sourceData: toolZKYCList,
                           tableHeight: listViewHeight,
                           indicatorPosition: 'right',
+                          indicator: indicatorTwo,
                         ),
                       ),
                     ],

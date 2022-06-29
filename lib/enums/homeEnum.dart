@@ -18,7 +18,7 @@ List<String> freightSpaceRowKey = [
 
 List<String> toolHeader = [
   '名称',
-  '器具编号',
+  '工器具编号',
   '类别',
   '标签',
   '型号',

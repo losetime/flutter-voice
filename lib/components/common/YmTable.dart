@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
 
 class YmTable extends StatefulWidget {
   final List<String> header;
@@ -7,12 +6,14 @@ class YmTable extends StatefulWidget {
   final List<List> sourceData;
   final double tableHeight;
   final String indicatorPosition;
+  final int indicator;
   const YmTable({
     Key? key,
     required this.header,
     required this.rowKey,
     required this.sourceData,
     required this.tableHeight,
+    required this.indicator,
     this.indicatorPosition = 'left',
   }) : super(key: key);
   @override
@@ -24,44 +25,19 @@ class _YmTable extends State<YmTable> {
 
   double offset = 0;
 
-  late Timer scrollTimer;
-
-  List<List> twoDimTableData = [];
-
-  int indicator = 0;
-
   @override
   void initState() {
     _scrollController = ScrollController();
     _scrollController.addListener(() {
       offset = _scrollController.offset;
     });
-    setTableScroll();
     super.initState();
   }
 
-  /*
-   * @desc 分割表格数据
-   */
-  void formattTableData() {
-    List<List> twoDimList = [];
-    int len = widget.tableHeight ~/ 40;
-    int index = 1;
-    while (true) {
-      if (index * len < widget.sourceData.length) {
-        List temp =
-            widget.sourceData.skip((index - 1) * len).take(len).toList();
-        twoDimList.add(temp);
-        index++;
-        continue;
-      }
-      List temp = widget.sourceData.skip((index - 1) * len).toList();
-      twoDimList.add(temp);
-      break;
-    }
-    setState(() {
-      twoDimTableData = twoDimList;
-    });
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   /*
@@ -140,7 +116,7 @@ class _YmTable extends State<YmTable> {
     List<Widget> listViewWrap = [];
     // 列表行
     if (widget.sourceData.isNotEmpty) {
-      listViewWrap = widget.sourceData[indicator].map((item) {
+      listViewWrap = widget.sourceData[widget.indicator].map((item) {
         return Container(
           padding: const EdgeInsets.all(2.0),
           child: Container(
@@ -187,6 +163,7 @@ class _YmTable extends State<YmTable> {
           return Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 sourceMap[item] == '0'
                     ? const Text(
@@ -198,18 +175,21 @@ class _YmTable extends State<YmTable> {
                     : Row(
                         children: [
                           const Icon(Icons.warning_amber_rounded,
-                              color: Color.fromRGBO(255, 148, 0, 1), size: 12),
-                          const Text(
-                            '放置错误',
-                            style: TextStyle(
-                              color: Color.fromRGBO(255, 148, 0, 1),
+                              color: Color.fromRGBO(255, 148, 0, 1), size: 15),
+                          Container(
+                            margin: const EdgeInsets.symmetric(horizontal: 2),
+                            child: const Text(
+                              '放置错误',
+                              style: TextStyle(
+                                color: Color.fromRGBO(255, 148, 0, 1),
+                              ),
                             ),
                           ),
                           Text(
                             '(${sourceMap[item]})',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: Color.fromRGBO(255, 148, 0, 1),
                             ),
                           ),
                         ],
@@ -267,7 +247,9 @@ class _YmTable extends State<YmTable> {
           border: Border.all(
             color: const Color.fromRGBO(0, 60, 141, 1),
           ),
-          color: indicator == i ? const Color.fromRGBO(0, 61, 143, 1) : null,
+          color: widget.indicator == i
+              ? const Color.fromRGBO(0, 61, 143, 1)
+              : null,
           borderRadius: const BorderRadius.all(Radius.circular(5)),
         ),
         child: Center(
@@ -290,23 +272,6 @@ class _YmTable extends State<YmTable> {
         children: paginationList,
       ),
     );
-  }
-
-  /*
-   * @desc 设置列表滚动 
-   */
-  void setTableScroll() {
-    scrollTimer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      if (indicator + 1 >= twoDimTableData.length) {
-        setState(() {
-          indicator = 0;
-        });
-      } else {
-        setState(() {
-          indicator += 1;
-        });
-      }
-    });
   }
 
   @override
