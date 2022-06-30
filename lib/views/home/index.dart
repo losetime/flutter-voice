@@ -31,8 +31,6 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
     'toolTypeNum': ''
   };
 
-  late TabController _tabController;
-
   int tabIndex = 0;
 
   late Timer switchTabsTimer;
@@ -50,22 +48,12 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
     super.initState();
     baseUtils = BaseUtils();
     Future.microtask(() => initProvider());
-    _tabController = TabController(vsync: this, length: 2);
-    _tabController.addListener(() {
-      //点击tab回调一次，滑动切换tab不会回调
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          tabIndex = _tabController.index;
-        });
-      }
-    });
     setTimingSwitchTab();
     changeIndicator();
   }
 
   @override
   void dispose() {
-    _tabController.dispose();
     switchTabsTimer.cancel();
     switchTableTimer.cancel();
     super.dispose();
@@ -127,12 +115,10 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
       if (tabIndex == 0 && toolLogList[0].isNotEmpty) {
         setState(() {
           tabIndex = 1;
-          _tabController.index = 1;
         });
       } else {
         setState(() {
           tabIndex = 0;
-          _tabController.index = 0;
         });
       }
     });
@@ -362,54 +348,62 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
    * @desc 渲染Tabs 
    **/
   Widget renderTabs() {
-    var tabsWrap = SizedBox(
-      width: 220,
-      height: 35,
-      child: TabBar(
-        controller: _tabController,
-        indicator: const BoxDecoration(
-          gradient: LinearGradient(
-            //渐变位置
-            begin: Alignment.topCenter, //右上
-            end: Alignment.bottomCenter, //左下
-            stops: [0.0, 1.0], //[渐变起始点, 渐变结束点]
-            //渐变颜色[始点颜色, 结束颜色]
-            colors: [
-              Color.fromRGBO(18, 155, 255, 0.4),
-              Color.fromRGBO(18, 155, 255, 1),
-            ],
-          ),
-          border: Border(
-            top: BorderSide(
-              color: Color.fromRGBO(18, 155, 255, 1),
+    return Row(
+      children: [
+        InkWell(
+          child: Container(
+            width: 100,
+            height: 33,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: tabIndex == 0
+                    ? const AssetImage('assets/images/tab-bg_active.png')
+                    : const AssetImage('assets/images/tab-bg.png'),
+                fit: BoxFit.fill,
+              ),
             ),
-            left: BorderSide(
-              color: Color.fromRGBO(18, 155, 255, 1),
-            ),
-            right: BorderSide(
-              color: Color.fromRGBO(18, 155, 255, 1),
+            child: const Center(
+              child: Text(
+                '仓位状态',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
+          onTap: () {
+            setState(() {
+              tabIndex = 0;
+            });
+          },
         ),
-        tabs: const [
-          Tab(
-            child: Text(
-              '仓位状态',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+        InkWell(
+          child: Container(
+            width: 100,
+            height: 33,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: tabIndex == 1
+                    ? const AssetImage('assets/images/tab-bg_active.png')
+                    : const AssetImage('assets/images/tab-bg.png'),
+                fit: BoxFit.fill,
+              ),
+            ),
+            child: const Center(
+              child: Text(
+                '异常工器具',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
-          Tab(
-            child: Text(
-              '异常工器具',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
-      ),
+          onTap: () {
+            setState(() {
+              tabIndex = 1;
+            });
+          },
+        ),
+      ],
     );
-    return tabsWrap;
   }
 
   @override
