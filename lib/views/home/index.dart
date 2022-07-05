@@ -125,6 +125,36 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
   }
 
   /*
+   * @desc 渲染统计单项
+   */
+  Widget renderOverviewItem(String name, String key) {
+    return Expanded(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Text(
+              name,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Text(
+            overviewData[key],
+            style: const TextStyle(
+              color: Color.fromRGBO(61, 255, 247, 1),
+              fontSize: 32,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /*
    * @desc 渲染统计部分
    **/
   Widget renderOverview() {
@@ -167,78 +197,15 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                 ),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '工器具类型',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            overviewData['toolTypeNum'],
-                            style: const TextStyle(
-                              color: Color.fromRGBO(61, 255, 247, 1),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                    renderOverviewItem('工器具类型', 'toolTypeNum'),
+                    const Image(
+                      image: AssetImage('assets/images/split-line.png'),
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '工器具总数量',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            overviewData['toolNum'],
-                            style: const TextStyle(
-                              color: Color.fromRGBO(251, 213, 68, 1),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                    renderOverviewItem('工器具总数量', 'toolNum'),
+                    const Image(
+                      image: AssetImage('assets/images/split-line.png'),
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '总仓位',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            overviewData['storeNum'],
-                            style: const TextStyle(
-                              color: Color.fromRGBO(68, 244, 126, 1),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    renderOverviewItem('总仓位', 'storeNum'),
                   ],
                 ),
               ),
@@ -285,54 +252,11 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                 ),
                 child: Row(
                   children: [
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '领取数量',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            overviewData['receiveNum'],
-                            style: const TextStyle(
-                              color: Color.fromRGBO(40, 213, 253, 1),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
+                    renderOverviewItem('领取数量', 'receiveNum'),
+                    const Image(
+                      image: AssetImage('assets/images/split-line.png'),
                     ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(right: 10),
-                            child: Text(
-                              '归还数量',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                          Text(
-                            overviewData['returnNum'],
-                            style: const TextStyle(
-                              color: Color.fromRGBO(68, 244, 126, 1),
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    renderOverviewItem('归还数量', 'returnNum'),
                   ],
                 ),
               ),
@@ -442,6 +366,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     sourceData: storeLogList,
                     tableHeight: listViewHeight,
                     indicator: indicatorOne,
+                    indicatorPosition: 'right',
                   )
                 : YmTable(
                     header: toolHeader,
@@ -449,6 +374,7 @@ class _HomeIndex extends State<HomeIndex> with SingleTickerProviderStateMixin {
                     sourceData: toolLogList,
                     tableHeight: listViewHeight,
                     indicator: indicatorTwo,
+                    indicatorPosition: 'right',
                   ),
           ),
         ],

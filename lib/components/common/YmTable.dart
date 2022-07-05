@@ -116,7 +116,11 @@ class _YmTable extends State<YmTable> {
     List<Widget> listViewWrap = [];
     // 列表行
     if (widget.sourceData.isNotEmpty) {
-      listViewWrap = widget.sourceData[widget.indicator].map((item) {
+      // 这里是为了防止定时器判断的数据页数与当前实际数据页码不符合
+      int index = widget.indicator < widget.sourceData.length
+          ? widget.indicator
+          : widget.sourceData.length - 1;
+      listViewWrap = widget.sourceData[index].map((item) {
         return Container(
           padding: const EdgeInsets.all(2.0),
           child: Container(
